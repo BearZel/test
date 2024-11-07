@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace AbakConfigurator.IEC
+namespace AbakConfigurator
 {
     internal class IntRangeValidationRule : ValidationRule
     {
@@ -35,4 +35,5 @@ namespace AbakConfigurator.IEC
             return new ValidationResult(true, null);
         }
     }
+
 }

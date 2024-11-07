@@ -1,0 +1,214 @@
+﻿<Window x:Class="AbakConfigurator.SequenceOfEvents"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+        mc:Ignorable="d"
+        Title="Журнал последовательности событий (SoE)" Height="450" Width="800">
+    
+    <Window.Resources>
+        <ControlTemplate x:Key="ValidationTemplate">
+            <Grid Margin="-20,3,0,0">
+                <Ellipse StrokeThickness="0" Fill="Red" 
+                         Width="{TemplateBinding FontSize}" 
+                         Height="{TemplateBinding FontSize}" />
+                <TextBlock Text="!" FontSize="{TemplateBinding FontSize}" 
+                           FontWeight="Bold" Foreground="White" 
+                           HorizontalAlignment="Center"/>
+            </Grid>
+        </ControlTemplate>
+
+        <Style x:Key="TextBoxInError" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                            Path=(Validation.Errors)[0].ErrorContent}">
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+
+    
+    <TabControl>
+        <TabItem Header="Журнал">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Content="Начало" HorizontalAlignment="Left"
+                    Grid.Row="1" VerticalAlignment="Center"/>
+                    <Label Content="Конец" HorizontalAlignment="Left" 
+                    Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
+
+                    <wpfTool:DateTimePicker HorizontalAlignment="Left" 
+                    Grid.Row="2" VerticalAlignment="Center" 
+                    Margin="2,2,2,2" Value="{Binding StartDate}" 
+                    FontSize="15" ValueChanged="DateTimePicker_ValueChanged" 
+                    Width="192"/>
+                    <wpfTool:DateTimePicker Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" 
+                    VerticalAlignment="Center" Margin="2,2,2,2" 
+                    Value="{Binding EndDate}" FontSize="15" 
+                    ValueChanged="DateTimePicker_ValueChanged" Width="192"/>
+
+                    <Label Grid.Column="2" Content="Источник" HorizontalAlignment="Left" 
+                    Grid.Row="1" VerticalAlignment="Center"/>
+
+                    <ComboBox x:Name="SourceCombobox" Grid.Column="2" 
+                    HorizontalAlignment="Left" Grid.Row="2" 
+                    VerticalAlignment="Center" Width="192" 
+                    Margin="2,2,2,2" ItemsSource="{Binding Sources}"
+                    SelectionChanged="SourceCombobox_SelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox IsChecked="{Binding IsSelected}" Width="20" VerticalAlignment="Center"  Checked="SourceCombobox_Checked" Unchecked="SourceCombobox_Checked"/>
+                                    <TextBlock Text="{Binding SourceFile}" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <TextBox x:Name="EventFilterTextBox" Grid.Column="3" 
+                    HorizontalAlignment="Left" Margin="2,2,2,2" 
+                    Grid.Row="2" TextWrapping="Wrap" 
+                    Text="{Binding EventName, UpdateSourceTrigger=PropertyChanged}" 
+                    TextChanged="EventFilterTextBox_TextChanged" 
+                    VerticalAlignment="Center" Width="194" FontSize="15"/>
+
+                    <Label Grid.Column="3" Content="Фильтр событий" 
+                    HorizontalAlignment="Left" Margin="2,2,2,2" 
+                    Grid.Row="1" VerticalAlignment="Center"/>
+
+                </Grid>
+
+                <ToolBar HorizontalAlignment="Left" VerticalAlignment="Center"
+                Width="785" Height="auto">
+                    <Button x:Name="RefreshButton" HorizontalAlignment="Left"
+                    VerticalAlignment="Top" Click="RefreshButton_Click">
+                        <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/update480.png" />
+                    </Button>
+                    <Button x:Name="CsvButton" HorizontalAlignment="Left"
+                    VerticalAlignment="Top" Click="CsvButton_Click">
+                        <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/csv512.png" />
+                    </Button>
+                    <ProgressBar x:Name="LoadingProgressBar" Minimum="0" Maximum="100" Width="100" Height="20" Margin="5,0,5,0" Value="{Binding Progress}" Visibility="{Binding ProgressVisibility}"/>
+                </ToolBar>
+
+                <DataGrid Grid.Row="2" ItemsSource="{Binding FilteredEvents}" 
+                AutoGenerateColumns="False" Margin="2,2,2,2">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Дата" Width="70" Binding="{Binding Timestamp, StringFormat=dd-MM-yyyy}"/>
+                        <DataGridTextColumn Header="Время" Width="75" Binding="{Binding Timestamp, StringFormat=HH:mm:ss.fff}"/>
+                        <DataGridTextColumn Header="Источник" Width="80" Binding="{Binding Source}"/>
+                        <DataGridTextColumn Header="Событие" Width="auto" Binding="{Binding Message}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </Grid>
+        </TabItem>
+        <TabItem Header="Настройки">
+            <Grid>
+                <GroupBox Header="Настройки логгирования модулей">
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="45*"/>
+                            <ColumnDefinition Width="67*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0"/> <!-- Скрываем пока не нужен -->
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Content="Путь к лог файлу"
+                               Grid.Row="0" Grid.Column="0" Margin="5,5,5,5"/>
+                        <TextBox Grid.Row="0" Grid.Column="1"
+                                 Margin="5,5,5,5" Text="{Binding LogPath}"/>
+
+                        <Label Content="Максимальный размер лога (MB)"
+                               Grid.Row="1" Grid.Column="0" Margin="5,5,5,5"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Margin="5,5,5,5"
+                                 Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                                 Style="{StaticResource TextBoxInError}">
+                            <Binding Path="LogSizeMb" UpdateSourceTrigger="PropertyChanged" >
+                                <Binding.ValidationRules>
+                                    <local:IntRangeValidationRule Min="1" Max="100"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox>
+
+                        <Label Content="Время до восстановления соединения (сек)"
+                               Grid.Row="2" Grid.Column="0" Margin="5,5,5,5"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Margin="5,5,5,5"
+                                 Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                                 Style="{StaticResource TextBoxInError}">
+                            <Binding Path="DelayRecovery" UpdateSourceTrigger="PropertyChanged" >
+                                <Binding.ValidationRules>
+                                    <local:IntRangeValidationRule Min="1" Max="300"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox>
+
+                        <Label Content="Период обновления (сек)"
+                               Grid.Row="3" Grid.Column="0" Margin="5,5,5,5"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Margin="5,5,5,5"
+                                 Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                                 Style="{StaticResource TextBoxInError}">
+                            <Binding Path="UpdateDelay" UpdateSourceTrigger="PropertyChanged" >
+                                <Binding.ValidationRules>
+                                    <local:IntRangeValidationRule Min="1" Max="60"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox>
+
+                        <Label Content="Модули (адреса)"
+                               Grid.Row="4" Grid.Column="0" Margin="5,5,5,5"/>
+                        <ComboBox Grid.Row="4" Grid.Column="1" Margin="5,5,5,5"
+                                  ItemsSource="{Binding Modules}"
+                                  SelectionChanged="ModulesCombobox_SelectionChanged">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox IsChecked="{Binding IsSelected}" Margin="5, 0"/>
+                                        <TextBlock Text="{Binding Module}" Margin="5, 0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <Button Content="Применить" Grid.Row="6" Grid.Column="3"
+                                Click="ApplyButton_Click"/>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Window>
