@@ -1,0 +1,50 @@
+﻿<Window x:Class="AbakConfigurator.GroupCreateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        mc:Ignorable="d"
+        Title="{DynamicResource l_SecureGroupCreate_Title}" Height="350" Width="470" WindowStartupLocation="CenterOwner" WindowStyle="SingleBorderWindow" ResizeMode="NoResize"
+        PreviewKeyDown="Window_PreviewKeyDown">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="10" Grid.Row="0" HorizontalAlignment="Center">
+            <GroupBox Header="{DynamicResource l_SecureGroupCreate_CommonGroup}">
+                <WrapPanel>
+                    <StackPanel Margin="5" Width="120">
+                        <TextBlock Text="{DynamicResource l_SecureGroupCreate_Name}" Margin="0,0,0,3"/>
+                        <TextBox x:Name="NameInput" Height="25" MaxLength="50" VerticalAlignment="Center" VerticalContentAlignment="Center" PreviewTextInput="Name_PreviewTextInput" Text="{Binding Group.Name, Mode=TwoWay}">
+                            <TextBox.ToolTip>
+                                <ToolTip Content="{DynamicResource l_SecureGroupCreate_NameRequire}"/>
+                            </TextBox.ToolTip>
+                        </TextBox>
+                    </StackPanel>
+
+                    <StackPanel Margin="5" Width="120">
+                        <TextBlock Text="{DynamicResource l_SecureGroupCreate_Type}" Margin="0,0,0,3"/>
+                        <ComboBox x:Name="TypeInput" Height="25" VerticalAlignment="Center" VerticalContentAlignment="Center" ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}" DisplayMemberPath="Name"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="5" Width="150">
+                        <TextBlock x:Name="DescriptionLabel" Text="{DynamicResource l_SecureGroupCreate_Description}" Margin="0,0,0,3"/>
+                        <TextBox x:Name="DescriptionInput" Height="25" MaxLength="50" VerticalAlignment="Center" VerticalContentAlignment="Center" Text="{Binding Group.Description, Mode=TwoWay}"/>
+                    </StackPanel>
+                </WrapPanel>
+            </GroupBox>
+            
+            <!--
+            <GroupBox Header="{DynamicResource l_SecureGroupCreate_PolicyGroup}" Margin="0,10,0,0">
+            </GroupBox>
+            -->
+        </StackPanel>
+
+        <WrapPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0">
+            <Button x:Name="CreateButton" Content="{DynamicResource l_SecureGroupCreate_Create}" Width="200" />
+        </WrapPanel>
+    </Grid>
+</Window>

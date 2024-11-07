@@ -1,0 +1,124 @@
+﻿<Window x:Class="AbakConfigurator.IECWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="{DynamicResource l_IEC_Title}" Height="500" Width="550" WindowStartupLocation="CenterOwner" WindowStyle="SingleBorderWindow">
+    <Window.Resources>
+        <local:StringToBooleanConverter x:Key="StringToBooleanConverter"/>
+        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <local:EntryTypeToVisibilityConverter x:Key="EntryTypeToVisibilityConverter"/>
+        <local:EntryDeveloperToVisibilityConverter x:Key="EntryDeveloperToVisibilityConverter"/>
+        
+        <Style x:Key="EntryTitle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style x:Key="EntryDescription" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <Style x:Key="EntryDeveloper" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#004B87"/>
+        </Style>
+
+        <Style x:Key="EntryTextBox" TargetType="{x:Type TextBox}">
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <AdornedElementPlaceholder x:Name="Placeholder">
+                                <Border BorderBrush="Red" BorderThickness="1">
+                                    <UIElement.Effect>
+                                        <DropShadowEffect ShadowDepth="0" Color="Red"/>
+                                    </UIElement.Effect>
+                                </Border>
+                            </AdornedElementPlaceholder>
+                            <TextBlock FontSize="11" FontWeight="SemiBold" Margin="0,2,0,0" Foreground="Red" Text="{Binding ElementName=Placeholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="10,0,10,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid Row="0" Margin="0,10,0,0">
+            <ListView SelectionChanged="ConfigList_SelectionChanged" x:Name="ConfigList" SelectionMode="Single" ItemsSource="{Binding IECStore.Entries.Values}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="5,5,0,5" Visibility="{Binding Developer, Converter={StaticResource EntryDeveloperToVisibilityConverter}}">
+                            <TextBlock Visibility="{Binding Developer, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource EntryDeveloper}">Developer</TextBlock>
+                            
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="ChangedMark" Visibility="Collapsed" Margin="0,0,3,0" Style="{StaticResource EntryTitle}"><Bold>*</Bold></TextBlock>
+                                <TextBlock Style="{StaticResource EntryTitle}" Text="{Binding Title}"/>
+                            </StackPanel>
+                            
+                            <TextBlock Style="{StaticResource EntryDescription}" Text="{Binding Description}"/>
+                            
+                            <ToggleButton x:Name="ConfigValueToggleButton" Style="{StaticResource SwitchTypeToggleButton}" Width="50" Height="20" Margin="0,5,0,15" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                          IsChecked="{Binding Value, Mode=TwoWay, Converter={StaticResource StringToBooleanConverter}, ConverterParameter=ToggleButton}"
+                                          Visibility="{Binding Type, Converter={StaticResource EntryTypeToVisibilityConverter}, ConverterParameter=ToggleButton}"
+                                          Click="ConfigValueToggleButton_Click" GotFocus="ConfigValueToggleButton_GotFocus"/>
+
+                            <TextBox x:Name="ConfigValueInput" Style="{StaticResource EntryTextBox}" Width="200" Height="25" Margin="0,5,0,15" MaxLength="25" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"  
+                                     Text="{Binding Value, Mode=TwoWay}"
+                                     Visibility="{Binding Type, Converter={StaticResource EntryTypeToVisibilityConverter}, ConverterParameter=TextBox}"
+                                     TextChanged="ConfigValueInput_TextChanged" GotFocus="ConfigValueInput_GotFocus">
+                                <i:Interaction.Behaviors>
+                                    <local:EntryInputBehavior Type="{Binding Type}"/>
+                                </i:Interaction.Behaviors>
+                            </TextBox>
+                        </StackPanel>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Value="True" Binding="{Binding Changed}">
+                                <Setter TargetName="ChangedMark" Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                            <DataTrigger Value="False" Binding="{Binding Changed}">
+                                <Setter TargetName="ChangedMark" Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ListView>
+            
+            <!--
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden">
+                <StackPanel Margin="5,5,5,5">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource RuleTitle}" Text="{DynamicResource l_IEC_ProxyStateTitle}"/>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource RuleDescription}" Text="{DynamicResource l_IEC_ProxyStateDesc}"/>
+                    <ToggleButton Style="{StaticResource SwitchTypeToggleButton}" Width="50" Height="20" Margin="0,5,0,15" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding ProxyState, Mode=TwoWay}"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource RuleTitle}" Text="{DynamicResource l_IEC_ProxyPortTitle}"/>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource RuleDescription}" Text="{DynamicResource l_IEC_ProxyPortDesc}"/>
+                    <TextBox Margin="0,5,0,15" Height="25" MaxLength="25" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="200" Text="{Binding ProxyPort, Mode=TwoWay}"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource RuleTitle}" Text="{DynamicResource l_IEC_ADHPortTitle}"/>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource RuleDescription}" Text="{DynamicResource l_IEC_ADHPortDesc}"/>
+                    <TextBox Margin="0,5,0,15" Height="25" MaxLength="25" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="200" Text="{Binding ADHPort, Mode=TwoWay}"/>
+                </StackPanel>
+            </ScrollViewer>
+            -->
+        </Grid>
+        <WrapPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+            <Button Click="SaveButton_Click" x:Name="SaveButton" Width="120" Content="Сохранить" Margin="0,0,10,0" IsEnabled="{Binding Changed}"/>
+            <Button Click="CancelButton_Click" x:Name="CancelButton" Width="120" Content="Отмена" Margin="0"/>
+        </WrapPanel>
+    </Grid>
+</Window>
