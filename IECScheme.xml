@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<IECScheme>
+	<Entry Key="proxy_status" Title="l_IEC_ProxyStateTitle" Description="l_IEC_ProxyStateDesc" Type="Boolean" Developer="False"/>
+	<Entry Key="adh_port" Title="l_IEC_ADHPortTitle" Description="l_IEC_ADHPortDesc" Type="Integer" Developer="False"/>
+	<Entry Key="proxy_port" Title="l_IEC_ProxyPortTitle" Description="l_IEC_ProxyPortDesc" Type="Integer" Developer="True"/>
+	<Entry Key="priority_sync_clock_iec10x" Title="l_IEC_SyncPriorityTitle" Description="l_IEC_SyncPriorityDesc" Type="Boolean" Developer="True"/>
+</IECScheme>
