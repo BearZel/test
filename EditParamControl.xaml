@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="AbakConfigurator.EditParamControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="Auto" Margin="0,0,0,0" Padding="0,0,0,0" BorderThickness="1" MinWidth="200" >
+    <UserControl.Resources>
+        <Style x:Key="ControlsStyle">
+            <Setter Property="Control.Padding" Value="0"/>
+            <Setter Property="Control.Margin" Value="0" />
+            <Setter Property="Control.VerticalAlignment" Value="Center" />
+            <Setter Property="Control.BorderThickness" Value="0" />
+        </Style>
+        <Style x:Key="ButtonsStyle" BasedOn="{StaticResource ControlsStyle}">
+            <Setter Property="Control.Width" Value="20" />
+        </Style>
+    </UserControl.Resources>
+    <Grid x:Name="editParamGrid" MouseEnter="GridMouseEnter_Handler" MouseLeave="GridMouseLeave_Handler" KeyUp="GridKeyUp_Handler" Margin="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="descTextBlock" 
+                   Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource ControlsStyle}" Text="{Binding Path=Description}" MouseLeftButtonUp="textBlockMouseUp_Handler"/>
+        <TextBlock Visibility="Hidden" x:Name="textBlock" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource ControlsStyle}" Text="{Binding Path=GuiValue}" MouseLeftButtonUp="textBlockMouseUp_Handler"/>
+        <TextBox x:Name="textBox" Grid.Column="0" Height="20" Style="{StaticResource ControlsStyle}" Visibility="Hidden" LostKeyboardFocus="textBoxLostKeyboardFocus_Handler"/>
+        <ComboBox x:Name="comboBox" Grid.Column="0" Height="20" Style="{StaticResource ControlsStyle}" Visibility="Hidden" LostKeyboardFocus="comboBoxLostKeyboardFocus_Handler"/>
+        <CheckBox x:Name="toggleButton" Width="40" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"  
+              Height="17" Click="toggleButton_Click" HorizontalAlignment="Left" Visibility="Hidden"
+              Grid.RowSpan="2" />
+        <TextBlock x:Name="localeTextBlock" Text="" Visibility="Hidden" Margin="20,0,0,0"/>
+        <Button x:Name="OKbutton" Grid.Column="1" Style="{StaticResource ButtonsStyle}" Visibility="Hidden" Click="OKButtonClick_Handler" Margin="0,0,1,0" >
+            <Button.Content>
+                <Image Style="{StaticResource ControlsStyle}" Source="/AbakConfigurator;component/icons/accept480.png" />
+            </Button.Content>
+        </Button>
+        <Button x:Name="Cancelbutton" Grid.Column="2" Style="{StaticResource ButtonsStyle}" Visibility="Hidden" Click="CancelButtonClick_Handler" >
+            <Button.Content>
+                <Image Style="{StaticResource ControlsStyle}" Source="/AbakConfigurator;component/icons/cancel480.png" />
+            </Button.Content>
+        </Button>
+    </Grid>
+</UserControl>

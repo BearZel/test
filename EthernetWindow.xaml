@@ -1,0 +1,535 @@
+﻿<!-- Окно настройки Ethernet интерфейсов контроллера -->
+<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="AbakConfigurator.EthernetWindow"
+        Title="{DynamicResource l_interfacesConfigWindow}" Height="665" Width="575"
+        ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Loaded="EthernetWindowLoaded" Closed="Window_Closed"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}" UseLayoutRounding="True"
+        local:HelpProvider.HelpAlias="IDH_TOPIC_OKNO__NASTROJKA_SETEVYKH_INTERFEJSOV_">
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="120" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Margin" Value="0,5,5,5" />
+        </Style>
+        <Style TargetType="{x:Type RadioButton}">
+            <Setter Property="Width" Value="120" />
+            <Setter Property="Margin" Value="0, 25, 0, 5" />
+        </Style>
+
+        <Style x:Key="DisableAtDHCP" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding DHCP}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="False" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding DHCP}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="True" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="VisibleAtWiFi" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding WiFi}" Value="True">
+                    <Setter Property="UIElement.Visibility" Value="Visible" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding WiFi}" Value="False">
+                    <Setter Property="UIElement.Visibility" Value="Hidden" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="InvisibleAtWiFi" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding EnableManualSettings}" Value="True">
+                    <Setter Property="UIElement.Visibility" Value="Visible" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EnableManualSettings}" Value="False">
+                    <Setter Property="UIElement.Visibility" Value="Hidden" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="EnableSpeedSettings">
+            <Setter Property="FrameworkElement.Margin" Value="2" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked, ElementName=speedModeBox}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="True"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsChecked, ElementName=speedModeBox}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="False"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="EnableGlobalIpSettings">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsGlobalPort}" Value="False">
+                    <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsGlobalPort}" Value="True">
+                    <Setter Property="UIElement.Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="VisibleAtInterfaceSelected" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsInterfaceSelected}" Value="True">
+                    <Setter Property="UIElement.Visibility" Value="Visible" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsInterfaceSelected}" Value="False">
+                    <Setter Property="UIElement.Visibility" Value="Hidden" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="EnableAtUp" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Up}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="True" />
+                    <Setter Property="UIElement.Opacity" Value="1" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Up}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="False" />
+                    <Setter Property="UIElement.Opacity" Value="0.5" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="DisableAtUp" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Up}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="False" />
+                    <Setter Property="UIElement.Opacity" Value="0.5" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Up}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="True" />
+                    <Setter Property="UIElement.Opacity" Value="1" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="OpenedWiFi" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Opened}" Value="True">
+                    <Setter Property="UIElement.Visibility" Value="Hidden" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Opened}" Value="False">
+                    <Setter Property="UIElement.Visibility" Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="VisibleAtChange" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Changed}" Value="True">
+                    <Setter Property="UIElement.Visibility" Value="Visible" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Changed}" Value="False">
+                    <Setter Property="UIElement.Visibility" Value="Hidden" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="210*" />
+            <ColumnDefinition Width="293*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="590"/>
+        </Grid.RowDefinitions>
+        <ToolBar Height="auto" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+            <Button x:Name="RefreshInterfacesButton" Click="RefreshButton_Handler" ToolTip="{DynamicResource l_refresh}">
+                <Image Width="24" Height="24" Source="/AbakConfigurator;component/icons/update480.png" />
+            </Button>
+            <Button x:Name="ShowInterfaceInfoButton" Style="{StaticResource VisibleAtInterfaceSelected}" Click="ShowInterfaceInfoButton_Handler" ToolTip="{DynamicResource l_interfaceInfo}">
+                <Image Width="24" Height="24" Source="/AbakConfigurator;component/icons/info512.png" />
+            </Button>
+            <Button x:Name="applyUpdatesButton" DataContext="{Binding SelectedInterface}" Style="{StaticResource VisibleAtChange}" ToolTip="{DynamicResource l_apply}" Click="applyUpdates_Handler">
+                <Image Width="24" Height="24" Source="/AbakConfigurator;component/icons/accept480.png" />
+            </Button>
+            <Button x:Name="discardUpdatesButton" DataContext="{Binding SelectedInterface}" Style="{StaticResource VisibleAtChange}" ToolTip="{DynamicResource l_cancel}" Click="discardUpdates_Handler">
+                <Image Width="24" Height="24" Source="/AbakConfigurator;component/icons/cancel480.png" />
+            </Button>
+        </ToolBar>
+        <ListBox x:Name="listBox" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding InterfacesList}" DisplayMemberPath="Description" >
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <EventSetter Event="UIElement.MouseUp" Handler="ListBoxItemMouseUp_Handler" />
+                    <!--<EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListBoxItem_MouseDown"/>-->
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+        <ScrollViewer Grid.Row="1" Grid.Column="1" CanContentScroll="True" MaxHeight="590">
+            <Grid x:Name="InterfaceSettingsGrid" Grid.Column="1" Grid.Row="1" DataContext="{Binding SelectedInterface}" DataContextChanged="InterfaceSettingsGrid_DataContextChanged"  
+              ScrollViewer.CanContentScroll="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="30" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="60"/>
+                    <!-- Static routes -->
+                    <RowDefinition Height="auto"/>
+                    <!-- Static routes -->
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="10"/>
+                    <!-- Global IP -->
+                    <RowDefinition Height="auto" MaxHeight="150"/>
+                    <!-- Global IP -->
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="auto" MaxHeight="200"/>
+                    <RowDefinition Height="10"/>
+                </Grid.RowDefinitions>
+                <RadioButton Grid.Column="1" Grid.Row="0" x:Name="StaticIPBox" 
+                             Content="{DynamicResource l_staticIPBox}" IsChecked="{Binding StatIP}" 
+                             Click="RadioButton_Click"/>
+                <RadioButton Grid.Column="2" Grid.Row="0" x:Name="DynamicIPBox" 
+                             Content="{DynamicResource l_dynamyicIPBox}" IsChecked="{Binding DHCP}" 
+                             Click="RadioButton_Click"/>
+                <Label 
+                    Grid.Column="1" 
+                    Grid.Row="1" 
+                    Grid.ColumnSpan="2" 
+                    Content="{DynamicResource l_ipAddressLabel}" />
+                <Image 
+                    x:Name="IPImage" 
+                    Grid.Column="0"
+                    Grid.Row="2"  
+                    DockPanel.Dock="Left" 
+                    Source="/AbakConfigurator;component/icons/empty480.png" Width="18" />
+                <TextBox 
+                    x:Name="IPBox" 
+                    Grid.Column="1" 
+                    Grid.Row="2"  
+                    MaxLength="15" 
+                    Grid.ColumnSpan="2" 
+                    Height="25"
+                    PreviewKeyDown="Grid_PreviewKeyDown" 
+                    TextChanged="OrdinaryIP_TextChanged" 
+                    PreviewTextInput="NumberValidationTextBox" 
+                    CommandManager.PreviewExecuted="PasteExecuted"
+                    Text="{Binding IP, UpdateSourceTrigger=PropertyChanged}" 
+                    Style="{StaticResource DisableAtDHCP}" 
+                    ToolTip="Введите набор из четырех чисел. Каждое число в этом наборе принадлежит интервалу от 0 до 255"/>
+                <Label 
+                    Grid.Column="1" 
+                    Grid.Row="3" 
+                    Grid.ColumnSpan="2" 
+                    Content="{DynamicResource l_subnetMaskBox}" />
+                <Image 
+                    x:Name="MaskImage" 
+                    Grid.Column="0" 
+                    Grid.Row="4"  
+                    DockPanel.Dock="Left" 
+                    Width="18" 
+                    Source="/AbakConfigurator;component/icons/empty480.png"/>
+                <TextBox 
+                    x:Name="MaskBox" 
+                    Grid.Column="1" 
+                    Grid.Row="4" 
+                    Grid.ColumnSpan="2" 
+                    MaxLength="15" 
+                    Height="25"  
+                    PreviewKeyDown="Grid_PreviewKeyDown" 
+                    PreviewTextInput="NumberValidationTextBox" 
+                    TextChanged="Mask_TextChanged"  
+                    CommandManager.PreviewExecuted="PasteExecuted"
+                    Text="{Binding NetMask, UpdateSourceTrigger=PropertyChanged}" 
+                    Style="{StaticResource DisableAtDHCP}"  
+                    ToolTip="Введите набор из четырех чисел. Каждое число в этом наборе принадлежит интервалу от 0 до 255"/>
+                <Label 
+                    Grid.Column="1" 
+                    Grid.Row="5" 
+                    Grid.ColumnSpan="2" 
+                    Content="{DynamicResource l_gatewayBox}"/>
+                <Image 
+                    x:Name="GatewayImage" 
+                    Grid.Column="0" 
+                    Grid.Row="6" 
+                    DockPanel.Dock="Left"
+                    Width="18" 
+                    Source="/AbakConfigurator;component/icons/empty480.png"/>
+                <TextBox 
+                    x:Name="GateBox" 
+                    Height="25" 
+                    Grid.Column="1" 
+                    Grid.Row="6" 
+                    Grid.ColumnSpan="2" 
+                    MaxLength="15"
+                    PreviewKeyDown="Grid_PreviewKeyDown" 
+                    PreviewTextInput="NumberValidationTextBox" 
+                    TextChanged="Element_TextChanged" 
+                    CommandManager.PreviewExecuted="PasteExecuted"
+                    Text="{Binding Gateway, UpdateSourceTrigger=PropertyChanged}" 
+                    Style="{StaticResource DisableAtDHCP}" 
+                    ToolTip="Введите набор из четырех чисел. Каждое число в этом наборе принадлежит интервалу от 0 до 255"/>
+                <Label Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="3" 
+                       Content="Внешняя подсеть                                  Префикс" />
+                <TextBox 
+     Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="2" x:Name="KostylIp" Height="25" Text="{Binding ExternalNetwork}"
+     Width="200" HorizontalAlignment="Left"/>
+                <TextBox 
+     Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="2" x:Name="KostylNetmask" Height="25" Text="{Binding Prefix}"
+     Width="40" HorizontalAlignment="Right"/>
+                <Label 
+                    Grid.Column="1" 
+                    Grid.Row="9" 
+                    Content="{DynamicResource l_dnsServersBox}" 
+                    d:IsLocked="True" />
+                <Button 
+                    x:Name="AddColumnButton" 
+                    Grid.Row="9" 
+                    Grid.Column="0" 
+                    Width="26" 
+                    Height="26"
+                    Click="AddColumn_Click"  
+                    Background="White"
+                    BorderThickness="0" 
+                    ToolTip="Добавить DNS-сервер">
+                    <Image 
+                    Width="24" 
+                    Height="24" 
+                    Source="/AbakConfigurator;component/icons/plus.png" />
+                </Button>
+                <Button 
+                    Grid.Row="10" 
+                    Grid.Column="0" 
+                    Width="Auto" 
+                    Height="28"
+                    BorderThickness="0"
+                    x:Name="DeleteColumnButton"  
+                    Click="DeleteColumn_Click" 
+                    VerticalAlignment="Top"  
+                    Background="White" 
+                    ToolTip="Удалить DNS-сервер" 
+                    Margin="-2,5,2,0">
+                    <Image 
+                    Width="26" 
+                    Height="26" 
+                    Source="/AbakConfigurator;component/icons/minus.png" />
+                </Button>
+                <!--<TextBox x:Name="DNSBox"  Grid.Column="1" PreviewTextInput="DNSNumberValidationTextBox"  
+                     PreviewKeyDown="Grid_PreviewKeyDown" Grid.Row="10" Grid.ColumnSpan="2" Height="25" Text="{Binding Path=DNSServers, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DisableAtDHCP}"/>-->
+
+                <DataGrid 
+                    x:Name="DnsGrid" 
+                    Grid.Row="10" 
+                    Grid.Column="1" 
+                    Grid.ColumnSpan="2" 
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False">
+                    <DataGrid.Columns >
+                        <DataGridTextColumn Header="№" Binding="{Binding Num}" Width="30"/>
+                        <DataGridTextColumn Header="Адрес" Binding="{Binding IP, UpdateSourceTrigger=PropertyChanged}" Width="210"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Label 
+                    Grid.Column="1" 
+                    Margin="0,30,0,0"
+                    Content="Static Routes" 
+                    HorizontalAlignment="Left" 
+                    Grid.Row="11" 
+                    VerticalAlignment="Center"/>
+                <Button HorizontalAlignment="Left" 
+                        Grid.Row="11" VerticalAlignment="Center" 
+                        Width="26" 
+                        Click="AddStaticRouteColumn_Click"
+                        Background="White" 
+                        BorderThickness="0"
+                        Margin="0,30,0,0">
+
+                    <Image 
+						Width="24" 
+						Height="24" 
+						Source="/AbakConfigurator;component/icons/plus.png" />
+                </Button>
+                <Button HorizontalAlignment="Center" Grid.Row="12" VerticalAlignment="Top" Width="27" Click="DeleteStaticRouteColumn_Click" Background="White" BorderThickness="0">
+                    <Image 
+						Width="26" 
+						Height="26" 
+						Source="/AbakConfigurator;component/icons/minus.png" />
+                </Button>
+                <DataGrid x:Name="StaticRouteGrid" Grid.Column="1" Grid.Row="12" Grid.ColumnSpan="2" AutoGenerateColumns="False" CanUserAddRows="False">
+                    <DataGrid.Columns >
+                        <DataGridTextColumn Header="№" Binding="{Binding Num}" Width="30"/>
+                        <DataGridTextColumn Header="Получатель" Binding="{Binding From, UpdateSourceTrigger=PropertyChanged}" Width="105"/>
+                        <DataGridTextColumn Header="Шлюз" Binding="{Binding To, UpdateSourceTrigger=PropertyChanged}" Width="105"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <GroupBox 
+                    Header="Дополнительные настройки" 
+                    Grid.RowSpan="2" 
+                    Grid.Row="13" 
+                    Grid.ColumnSpan="4" 
+                    Style="{StaticResource InvisibleAtWiFi}">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="1" Grid.Column="0" Content="Скорость (МБ/с)" />
+                            <Label Grid.Row="1" Grid.Column="1" Content="{DynamicResource l_duplexComboBox}" />
+                            <ComboBox x:Name="speedComboBox" Grid.Row="2" Grid.Column="0" Style="{StaticResource EnableSpeedSettings}" Text="{Binding Speed}">
+                                <ComboBoxItem>
+                                    <TextBlock><Run Text="10"/></TextBlock>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock><Run Text="100"/></TextBlock>
+                                </ComboBoxItem>
+                            </ComboBox>
+                            <ComboBox x:Name="duplexComboBox" Grid.Row="2" Grid.Column="1"  Style="{StaticResource EnableSpeedSettings}" Text="{Binding Duplex}">
+                                <ComboBoxItem>
+                                    <TextBlock><Run Text="FULL"/></TextBlock>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock><Run Text="HALF"/></TextBlock>
+                                </ComboBoxItem>
+                            </ComboBox>
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+                <CheckBox x:Name="GlobalIpCheckbox" HorizontalAlignment="Left"   
+                      Grid.Row="16"  
+                      IsChecked="{Binding IsGlobalIpOn, UpdateSourceTrigger=PropertyChanged}" 
+                      Click="GlobalIpCheckbox_Click"
+                      Panel.ZIndex="1"
+                      Margin="9,2,0,0" 
+                      Style="{StaticResource EnableGlobalIpSettings}"/>
+                <GroupBox x:Name="GlobalIPGroupBox" 
+                          Header="     Настройки глобального IP" 
+                          Grid.Row="16"  
+                          Grid.ColumnSpan="4"                
+                          Style="{StaticResource EnableGlobalIpSettings}">
+                    <Grid IsEnabled="{Binding IsGlobalIpOn, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="12.667"/>
+                            <ColumnDefinition Width="17.333"/>
+                            <ColumnDefinition Width="4*" />
+                            <ColumnDefinition Width="119*"/>
+                            <ColumnDefinition Width="30" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="3" 
+                           Content="{DynamicResource l_ipAddressLabel}" />
+                        <Image x:Name="GlobalIPImage" Grid.Column="0" Grid.Row="1" Width="18" 
+                           Source="/AbakConfigurator;component/icons/empty480.png" Margin="4,0,8,0" Grid.ColumnSpan="2" />
+                        <local:PrefixTextBox
+                            Grid.Column="2"
+                            Grid.Row="1"
+                            Height="25"
+                            PreviewTextInput="GlobalIpP_PreviewTextInput"
+                            PreviewKeyDown="GlobalIpPrefix_PreviewKeyDown"
+                            Prefix="{Binding PrefixGLobalIP, UpdateSourceTrigger=PropertyChanged}"
+                            Text="{Binding GLobalIP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                            IsEnabled="{Binding IsGlobalIp}" 
+                            x:Name="GlobalIpPrefix" 
+                            Grid.ColumnSpan="2"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox 
+                    x:Name="PingIpGroupBox"                        
+                    Grid.Row="18"     
+                    Grid.ColumnSpan="4"                           
+                    Header="     Настройки пинга">
+                    <Grid IsEnabled="{Binding IsPingOn, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="30" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label 
+                            Grid.Column="1" 
+                            Grid.Row="0" Grid.ColumnSpan="2" 
+                            Content="{DynamicResource l_ipAddressLabel}" />
+                        <Image 
+                            x:Name="PingIpImage" 
+                            Grid.Column="0" 
+                            Grid.Row="1" 
+                            Width="19" 
+                            Source="/AbakConfigurator;component/icons/empty480.png" 
+                            Margin="1.264,0,6,0" />
+                        <TextBox 
+                            x:Name="PingIpBox"
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            PreviewKeyDown="Grid_PreviewKeyDown"
+                            MaxLength="15"
+                            TextChanged="IP_TextChanged"
+                            CommandManager.PreviewExecuted="PasteExecuted"
+                            Height="25"
+                            PreviewTextInput="NumberValidationTextBox"
+                            Text="{Binding PingIP, UpdateSourceTrigger=PropertyChanged}"
+                            IsEnabled="{Binding IsPingOn}"/>
+
+                        <Label
+                            Grid.Column="1" 
+                            Grid.Row="2"
+                            Content="Допустимое количество потерь связи"/>
+                        <TextBox
+                            Grid.Column="1"
+                            Grid.Row="3"
+                            MaxLength="15"
+                            Height="25"
+                            CommandManager.PreviewExecuted="PasteExecuted"
+                            PreviewTextInput="PingValidationTextBox"
+                            Text="{Binding MinErrors, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <Label
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            Grid.Row="4"
+                            Content="Таймаут, мс"/>
+                        <TextBox
+                            Grid.Column="1"
+                            Grid.Row="5"
+                            MaxLength="15"
+                            Height="25"
+                            CommandManager.PreviewExecuted="PasteExecuted"
+                            PreviewTextInput ="PingValidationTextBox"
+                            Text="{Binding TimeOut, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                </GroupBox>
+                <CheckBox x:Name="PingIpCheckbox" 
+                              HorizontalAlignment="Left"   
+                              Grid.Row="18"  
+                              IsChecked="{Binding IsPingOn, UpdateSourceTrigger=PropertyChanged}" 
+                              Panel.ZIndex="1"
+                              Margin="9,2,0,0"/>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Window>

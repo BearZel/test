@@ -1,0 +1,59 @@
+﻿<Window x:Class="AbakConfigurator.CustomMsgBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        WindowStyle="SingleBorderWindow" 
+        WindowStartupLocation="CenterOwner"
+        Height="160" Width="400"
+        ResizeMode="NoResize"
+        Title="{Binding WindowTitle}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width = "400"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="12*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">
+                <Image Source="/AbakConfigurator;component/icons/exclamationmark.png" Stretch="UniformToFill" StretchDirection="Both"
+                       Width="48" Height="48" Margin="0" />
+                <TextBlock x:Name="TBNodeId" MinWidth="50" FontSize="16" 
+                           Text="{Binding Message}" Margin="26,0,0,0"
+                           VerticalAlignment="Center">
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+        
+        <!--CheckBox Grid.Row="1"  Grid.ColumnSpan="1" Content="Применить для всех?" HorizontalAlignment="Left" Margin="33,8,0,0" VerticalAlignment="Top" x:Name="AcceptForAllBox" FontSize="16" Height="23"/-->
+        <Grid Grid.Row="2" 
+              Margin="0,4.2,6,0" Background="#EBEBEB">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button x:Name="FirstButton" ToolTip="{Binding FirstButtonTip}"
+                        Width="Auto" MinWidth="60" Margin="0" Height="30" 
+                        FontSize="16" Click="AutomaticButtonClick_Handler" >
+                    <Button.Content>
+                        <TextBlock Text="{Binding FirstButtonName}" HorizontalAlignment="Center" Margin="5,0"/>
+                    </Button.Content>
+                </Button>
+                <Button x:Name="SecondButton" ToolTip="{Binding SecondButtonTip}" 
+                        Width="Auto" MinWidth="60" Margin="10,0,0,0" Height="30"
+                        FontSize="16" Click="ManualButtonClick_Handler">
+                    <Button.Content>
+                        <TextBlock Text="{Binding SecondButtonName}" HorizontalAlignment="Center" Margin="5,0"/>
+                    </Button.Content>
+                </Button>
+                <Button x:Name="CancelButton" Content="Отмена" Width="74"
+                        Margin="10,0,0,0" Height="30" FontSize="16" IsCancel="True"  />
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+</Window>

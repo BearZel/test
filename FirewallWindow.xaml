@@ -1,0 +1,85 @@
+﻿<Window x:Class="AbakConfigurator.FirewallWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        mc:Ignorable="d"
+        Title="{DynamicResource l_firewallWindowName}" Height="370" Width="716"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Loaded="windowLoaded"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        local:HelpProvider.HelpAlias="IDH_TOPIC_OKNO__NASTROJKI_SETEVOGO_EHKRANA_">
+    <Window.Resources>
+        <Style x:Key="CenterGridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ToolBar Grid.Row="0" VerticalAlignment="Top" Height="auto">
+            <Button x:Name="NewButton" Click="NewButtonClick_Handler" ToolTip="{DynamicResource l_resetFirewall}">
+                <Image Width="24" Height="24" Source="/AbakConfigurator;component/icons/new480.png" />
+            </Button>
+            <Button x:Name="AddButton" Click="AddButtonClick_Handler" ToolTip="{DynamicResource l_addRuleFirewall}">
+                <Image Width="24" Height="24" Source="/AbakConfigurator;component/icons/add480.png" />
+            </Button>
+            <Button x:Name="RemoveButton" Click="RemoveButtonClick_Handler" ToolTip="{DynamicResource l_deleteRuleFirewall}">
+                <Image Width="24" Height="24" Source="/AbakConfigurator;component/icons/delete480.png" />
+            </Button>
+            <Button x:Name="UpdateButton" Click="UpdateButton_Click" ToolTip="{DynamicResource l_refreshRulesFirewall}">
+                <Image Width="24" Height="24" Source="/AbakConfigurator;component/icons/update480.png" />
+            </Button>
+        </ToolBar>
+        <Grid Grid.Row="1" x:Name="EnableFW" Visibility="Visible">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="4*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <!--<CheckBox Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="1" Content="Активация служб сетевого экрана" VerticalAlignment="Center" FontSize="14"/>-->
+            <ToggleButton  Width="40" Grid.Row="0" Grid.Column="0" IsChecked="{Binding FireWallState}" VerticalAlignment="Center"
+              Height="17"
+              Style="{StaticResource SwitchTypeToggleButton}" Grid.RowSpan="2" />
+
+            <Label Grid.Row="0" Grid.Column="1"  Content="Активация служб сетевого экрана" FontSize="14"  Grid.RowSpan="2"/>
+        </Grid>
+
+        <DataGrid Grid.Row="2"  x:Name="dataGrid" ItemsSource="{Binding Rules}" ColumnWidth="Auto" AutoGenerateColumns="False"
+                  IsEnabled="{Binding FireWallState}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{DynamicResource l_portColNameFirewall}" Binding="{Binding Path=Port}" HeaderStyle="{StaticResource CenterGridHeaderStyle}" MinWidth="150"/>
+                <DataGridComboBoxColumn Header="{DynamicResource l_typeColNameFirewall}" SelectedItemBinding="{Binding Path=TypeString}"  HeaderStyle="{StaticResource CenterGridHeaderStyle}" MinWidth="50">
+                    <DataGridComboBoxColumn.ItemsSource>
+                        <col:ArrayList>
+                            <sys:String>TCP</sys:String>
+                            <sys:String>UDP</sys:String>
+                        </col:ArrayList>
+                    </DataGridComboBoxColumn.ItemsSource>
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                </DataGridComboBoxColumn>
+                <DataGridTextColumn Header="IP Адрес" Binding="{Binding Path=IpAddress}" HeaderStyle="{StaticResource CenterGridHeaderStyle}" MinWidth="150"/>
+                <DataGridTextColumn Header="MAC Адрес" Binding="{Binding Path=MacAddress}" HeaderStyle="{StaticResource CenterGridHeaderStyle}" MinWidth="150"/>
+                <DataGridTextColumn Header="{DynamicResource l_description}" Binding="{Binding Path=Description}" HeaderStyle="{StaticResource CenterGridHeaderStyle}" MinWidth="250"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <WrapPanel Grid.Row="3" HorizontalAlignment="Right" Height="auto">
+            <Button x:Name="OKButton" Content="OK" IsDefault="True" Click="OKButtonClick_Handler"></Button>
+            <Button x:Name="CancelButton" Content="{DynamicResource l_cancel}" IsCancel="True"></Button>
+        </WrapPanel>
+    </Grid>
+</Window>

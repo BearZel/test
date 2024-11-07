@@ -1,0 +1,72 @@
+﻿<Window x:Class="AbakConfigurator.ControllersWindow"
+        x:Name="controllersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        xmlns:cm="clr-namespace:System.ComponentModel;assembly=System"
+        Title="{DynamicResource l_controllersButton}" Height="386" Width="830"
+        ResizeMode="CanResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Loaded="Window_Loaded"
+        Closed="Window_Closed"
+        local:HelpProvider.HelpAlias="IDH_TOPIC_OKNO_DOSTUPNYE_KONTROLLERY">
+    <Window.Resources>
+
+        <cm:BackgroundWorker 
+            x:Key="findAbaksWorker" 
+            WorkerSupportsCancellation="True" 
+            DoWork="findAbakWorker_Handler" 
+            ProgressChanged="findAbakProgressChanged_Handler" 
+            WorkerReportsProgress="True"/>
+
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <ToolBar Grid.Row="0">
+            <Button x:Name="UpdateButton" Click="UpdateButton_Click" ToolTip="{DynamicResource l_refreshRulesFirewall}">
+                <Image Width="24" Height="24" Source="/AbakConfigurator;component/icons/update480.png" />
+            </Button>
+        </ToolBar>
+        <ListView x:Name="ControllersListView"
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  ItemsSource="{Binding Settings.ControllersList, ElementName=controllersWindow, Mode=TwoWay}"
+                  GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="BorderBrush" Value="LightGray" />
+                    <Setter Property="BorderThickness" Value="0,0,0,1" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="{DynamicResource l_serialColumn}" Width="auto" DisplayMemberBinding="{Binding Path=Serial}" />
+                    <GridViewColumn 
+                        Header="Описание" 
+                        Width="auto" 
+                        DisplayMemberBinding="{Binding Path=Description}" />
+                    <GridViewColumn Header="Версия ПЛК" Width="auto" DisplayMemberBinding="{Binding Path=PlcVersion}" />
+                    <GridViewColumn Header="Версия сборки" Width="auto" DisplayMemberBinding="{Binding Path=Assembly}" />
+                    <GridViewColumn Header="{DynamicResource l_hostNameLabel}" Width="auto" DisplayMemberBinding="{Binding Path=Hostname}" />
+                    <GridViewColumn Header="{DynamicResource l_ipAddressLabel}" Width="auto" DisplayMemberBinding="{Binding Path=IP}" />
+                    <GridViewColumn Header="{DynamicResource l_subnetMaskBox}" Width="auto" DisplayMemberBinding="{Binding Path=Netmask}" />
+                    <GridViewColumn Header="{DynamicResource l_macAddressBox}" Width="auto" DisplayMemberBinding="{Binding Path=MacAddress}" />
+                    <GridViewColumn Header="{DynamicResource l_ifaceColumn}" Width="auto" DisplayMemberBinding="{Binding Path=Interface}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <TextBlock Grid.Row="2"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Margin="10,0,0,0"
+                   Text="{Binding Settings.CountControllers, ElementName=controllersWindow, Mode=OneWay, StringFormat=Строк: \{0\}, FallbackValue='Строк: '}"/>
+        <WrapPanel Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right">
+            <Button x:Name="OKButton" Content="OK" IsDefault="True" Click="OKButtonClick_Handler"/>
+            <Button x:Name="CancelButton" Content="{DynamicResource l_cancel}" IsCancel="True" />
+            <Button x:Name="BlinkButton" Content="{DynamicResource l_blink}" Click="BlinkButtonClick_Handler"/>
+        </WrapPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,83 @@
+﻿<Window x:Class="AbakConfigurator.EditCOMPortWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        mc:Ignorable="d"
+        Title="{DynamicResource l_port_Title}" Height="Auto" Width="268"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <local:CBaudRates x:Key="BaudRates" />
+        <local:StopBitsValueConverter x:Key="stopBitsConverter" />
+        <local:ParityBitsConverter x:Key="parityConverter" />
+    </Window.Resources>
+    <Grid Width="250" Margin="2">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" x:Name="SettingsGrid" DataContext="{Binding Path=Port}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="{DynamicResource l_portName_COM}" />
+            <TextBox Grid.Row="1" x:Name="PortNameBox" Height="25" Text="{Binding Path=Name, Mode=OneWay}" IsEnabled="False" />
+            <!--<Label Grid.Row="2" Content="{DynamicResource l_portName_COM}" />-->
+            <Label Grid.Row="2" Content="{DynamicResource l_port_device}" />
+            <TextBox Grid.Row="3" x:Name="FileNameBox" Height="25" Text="{Binding Path=FileName, Mode=OneWay}" IsEnabled="False" />
+            <Label Grid.Row="4" Content="{DynamicResource l_baudRate_COM}" />
+            <ComboBox Grid.Row="5" x:Name="BaudBox" Height="25" 
+                      ItemsSource="{Binding Source={StaticResource BaudRates}, Path=BaudRates}" 
+                      SelectedValue="{Binding Path=BaudRate}"
+                      SelectionChanged="BaudBox_SelectionChanged"/>
+            <Label Grid.Row="6" Content="{DynamicResource l_stopBits_COM}" />
+            <ComboBox Grid.Row="7" x:Name="StopBitsBox" Height="25" ItemsSource="{Binding Source={local:EnumToItemsSource {x:Type local:STOPBITS_TYPE}}}" SelectedValue="{Binding Path=StopBits, Converter={StaticResource stopBitsConverter}}" />
+            <Label Grid.Row="8" Content="{DynamicResource l_parity_COM}" />
+            <ComboBox Grid.Row="9" x:Name="ParityBitsBox" Height="25" ItemsSource="{Binding Source={local:ParityEnumToItemsSource {x:Type local:PARITYBITS_TYPE}}}" SelectedValue="{Binding Path=ParityBit, Converter={StaticResource parityConverter}}"/>
+            <Label Grid.Row="10" Content="{DynamicResource l_interval_COM}" />
+            <TextBox Grid.Row="11" x:Name="IntervalBox" Height="25" Text="{Binding Path=Interval, UpdateSourceTrigger=PropertyChanged}"
+                     PreviewTextInput="NumberValidationTextBox"/>
+            <Label Grid.Row="12" Content="{DynamicResource l_modbusAddress_COM}" />
+            <TextBox Grid.Row="13" x:Name="AddrBox" Height="25" Text="{Binding Path=ModbusAddr, UpdateSourceTrigger=PropertyChanged}"
+                     PreviewTextInput="NumberValidationTextBox"/>
+            <CheckBox Grid.Row="15" x:Name="SlaveCheckBox" VerticalAlignment="Center" Content="{DynamicResource l_slave_COM}" IsChecked="{Binding Path=SlaveMode}"/>
+            <CheckBox Grid.Row="17" x:Name="RedirectCheckBox" VerticalAlignment="Center" IsChecked="{Binding Path=IsRedirect}"            
+                      Panel.ZIndex="1" Margin="10,2,0,63" Height="16" Click="RedirectCheckBox_Click"/>
+
+            <GroupBox Header="      Редирект" Grid.Row="17" Margin="0,0,0,0" Grid.RowSpan="2" x:Name="RedirectBox">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" x:Name="IPCheckBox" Content="IP-порт"/>
+                    <TextBox Grid.Row="1" x:Name="IPTextBox" Height="25" Text="{Binding Path=RedirectPort, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding Path=IsRedirect}" PreviewTextInput="NumberValidationTextBox"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <WrapPanel Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right">
+            <Button x:Name="OKButton" Content="OK" IsDefault="True" Click="OKButtonClick_Handler"/>
+            <Button x:Name="CancelButton" Content="{DynamicResource l_cancel}" IsCancel="True" />
+        </WrapPanel>
+    </Grid>
+</Window>
