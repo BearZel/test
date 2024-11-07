@@ -1,0 +1,996 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+    xmlns:local="clr-namespace:AbakConfigurator"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    x:Name="window" mc:Ignorable="d" x:Class="AbakConfigurator.MainWindow"
+    Height="683.5" Width="1141" WindowStyle="SingleBorderWindow" 
+    MaxHeight="Infinity"
+    Title="Конфигуратор АБАК ПЛК"
+    WindowStartupLocation="CenterOwner"
+    Loaded="MainFormLoaded"
+    Closed="MainFormClosed"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    Closing="ClosingOff"
+    SourceInitialized="Window_SourceInitialized"
+    local:HelpProvider.HelpAlias="IDH_TOPIC_GLAVNOE_OKNO_PRILOZHENIYA">
+
+    <Window.Resources>
+        <local:CCurrentState x:Key="currentState" />
+        <local:DebugDummyConverter x:Key="debugDummy" />
+        <local:VisibilityConverter x:Key="visibilityConverter" />
+        <local:WDTVisibilityConverter x:Key="wdtVisibility" />
+        <local:PLCVersionVisibilityConverter x:Key="PLCVersionVisibility" />
+        <local:UpdateModulesVisibilityConverter x:Key="updVisibility" />
+        <local:CAuxil x:Key="Auxilsource"/>
+        <local:BindingProxy x:Key="Proxy" Data="{Binding}"/>
+        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        
+        <CollectionViewSource x:Key="paramsSRC" Source="{Binding Config.VisibleParamsList}">
+            <!--Группировка параметров-->
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="GroupName" />
+            </CollectionViewSource.GroupDescriptions>
+            <!--Сортировка параметров-->
+            <CollectionViewSource.SortDescriptions>
+                <!--Сортируется по имени-->
+                <scm:SortDescription PropertyName="Name"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="modulesValuesSRC" Source="{Binding Config.ModulesParamsList}">
+            <!--Группировка параметров-->
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="GroupName" />
+            </CollectionViewSource.GroupDescriptions>
+            <!--Сортировка параметров-->
+            <CollectionViewSource.SortDescriptions>
+                <!--Сортируется по имени-->
+                <scm:SortDescription PropertyName="Name"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="modulesListSRC" Source="{Binding Config.Modules.GroupsList}">
+            <!--Группировка параметров-->
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="TypeString" />
+            </CollectionViewSource.GroupDescriptions>
+            <!--Сортировка параметров-->
+            <CollectionViewSource.SortDescriptions>
+                <!--Сортируется по имени-->
+                <scm:SortDescription PropertyName="NodeID"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <Style x:Key="DisabledStyle">
+            <Style.Triggers>
+                <Trigger Property="UIElement.IsEnabled" Value="False">
+                    <Setter Property="UIElement.Opacity" Value="0.5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="HiddenStyle">
+            <Style.Triggers>
+                <Trigger Property="UIElement.Visibility" Value="Hidden">
+                    <Setter Property="UIElement.Opacity" Value="0.5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="CollapsedStyle">
+            <Style.Triggers>
+                <Trigger Property="UIElement.Visibility" Value="Collapsed">
+                    <Setter Property="UIElement.Opacity" Value="0.5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <!-- Базовый стиль элемента меню -->
+        <Style x:Key="MenuItemBase" BasedOn="{StaticResource DisabledStyle}">
+            <Setter Property="Control.Padding" Value="5,5,5,5" />
+        </Style>
+
+        <!-- Стиль элемента который разрешен при включенном опросе контроллера -->
+        <Style x:Key="MenuItemEnabledOnRun" BasedOn="{StaticResource MenuItemBase}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsRunning, Source={StaticResource currentState}}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="True" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsRunning, Source={StaticResource currentState}}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="False" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ControlsStyle">
+            <Setter Property="Control.Padding" Value="0"/>
+            <Setter Property="Control.Margin" Value="0" />
+            <Setter Property="Control.VerticalAlignment" Value="Center" />
+            <Setter Property="Control.BorderThickness" Value="0" />
+        </Style>
+        <Style x:Key="ButtonsStyle" BasedOn="{StaticResource ControlsStyle}">
+            <Setter Property="Control.Width" Value="20" />
+        </Style>
+        <Style x:Key="MenuItemVisibleForUpdate" BasedOn="{StaticResource MenuItemEnabledOnRun}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CGlobal.CurrState.Update_On}" Value="True">
+                    <Setter Property="UIElement.Visibility" Value="Visible" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CGlobal.CurrState.Update_On}" Value="False">
+                    <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <!-- Стиль элемента который запрещен при включенном опросе контроллера -->
+        <Style x:Key="MenuItemDisabledOnRun" BasedOn="{StaticResource MenuItemBase}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsRunning, Source={StaticResource currentState}}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="False" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsRunning, Source={StaticResource currentState}}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="True" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <!-- Режим одиночного ЦПУ -->
+        <Style x:Key="CpuSingleState">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Config.IsCpuSingle}" Value="True">
+                    <Setter Property="UIElement.Visibility" Value="Visible" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Config.IsCpuSingle}" Value="False">
+                    <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="GroupBoxEnabledOnRun" BasedOn="{StaticResource HiddenStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsRunning, Source={StaticResource currentState}}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="True" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsRunning, Source={StaticResource currentState}}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="False"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <!-- Стиль элемента который разрешен при включенном опросе контроллера -->
+        <Style x:Key="ToolButtonDisabledOnRn" BasedOn="{StaticResource DisabledStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsRunning, Source={StaticResource currentState}}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="False" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsRunning, Source={StaticResource currentState}}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="True" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <!-- Отключение кнопок во время обновления -->
+        <Style x:Key="ToolButtonDisabledOnUpdate" BasedOn="{StaticResource DisabledStyle}" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Update_On, Source={StaticResource currentState}}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="False" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Update_On, Source={StaticResource currentState}}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="True" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ToolButtonEnabledOnUpdate" BasedOn="{StaticResource DisabledStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Update_On, Source={StaticResource currentState}}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="True" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Update_On, Source={StaticResource currentState}}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="False" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <!-- Стиль при обнловлении модулей -->
+        <Style x:Key="ScreenUpdateDisabledOnUpdate" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Update_On, Source={StaticResource currentState}}" Value="True">
+                    <Setter Property="UIElement.Visibility" Value="Hidden" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Update_On, Source={StaticResource currentState}}" Value="False">
+                    <Setter Property="UIElement.Visibility" Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ScreenUpdateEnabledOnUpdate" BasedOn="{StaticResource DisabledStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Update_On, Source={StaticResource currentState}}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="True" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Update_On, Source={StaticResource currentState}}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="False" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <!-- Стиль элемента который запрещен при включенном опросе контроллера -->
+        <Style x:Key="ToolButtonEnabledOnRun" BasedOn="{StaticResource DisabledStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsRunning, Source={StaticResource currentState}}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="True" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsRunning, Source={StaticResource currentState}}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="False" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <!-- Стиль элемента который разрешен при выключенном опросе контроллера -->
+        <Style x:Key="ButtonDisabledOnRn" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsRunning, Source={StaticResource currentState}}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="False" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsRunning, Source={StaticResource currentState}}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="True" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <!-- Стиль элемента который запрещен при включенном опросе контроллера -->
+        <Style x:Key="ButtonEnabledOnRun" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsRunning, Source={StaticResource currentState}}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="True" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsRunning, Source={StaticResource currentState}}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="False" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <!-- Стиль для эллипса -->
+        <Style TargetType="{x:Type Ellipse}">
+            <Setter Property="Width" Value="15"/>
+            <Setter Property="Height" Value="15" />
+            <Setter Property="Margin" Value="2,2,2,2" />
+            <Setter Property="Visibility" Value="{Binding IsRunning, ConverterParameter=Visible, Converter={StaticResource visibilityConverter}, Source={StaticResource currentState}}"/>
+        </Style>
+        <!--Стиль для картинок операторов-->
+        <Style x:Key="operImage">
+            <Setter Property="FrameworkElement.Width" Value="24" />
+            <Setter Property="FrameworkElement.Height" Value="24" />
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="LightGray"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Background" Value="LightGray"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="False">
+                    <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="BorderThickness" Value="1,1,0,0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <ContextMenu x:Key="moduleContextMenu" StaysOpen="False">
+            <MenuItem x:Name="SaveModuleSettingsMenuItem" Header="{DynamicResource l_saveModuleDB}" Click="SaveModuleSettingsMenuItem_Handler" />
+            <MenuItem x:Name="RemoveModuleSettingsMenuItem" Header="{DynamicResource l_deleteModuleDB}" Click="RemoveModuleSettingsMenuItem_Handler"/>
+            <Separator Style="{StaticResource MenuItemVisibleForUpdate}"/>
+            <MenuItem Header="Отменить процедуру обновления ПО" Click="CancelUpdateModuleSoftClick_Handler" 
+                      Style="{StaticResource ToolButtonEnabledOnUpdate}"/>
+            <Separator Style="{StaticResource MenuItemVisibleForUpdate}"/>
+            <MenuItem Header="Перезагрузить модуль" Click="ResetModule_Click_1" Style="{StaticResource ToolButtonDisabledOnUpdate}"/>
+        </ContextMenu>
+        <ContextMenu x:Key="modulesContextMenu" StaysOpen="False">
+            <MenuItem x:Name="RebootModulesMenuItem" Header="Перезагрузить модули" Click="RebootModulesMenuItem_Click"/>
+            <MenuItem x:Name="SaveModulesSettingsMenuItem" Header="{DynamicResource l_saveModulesDB}" Click="SaveModulesSettingsMenuItem_Handler" />
+            <MenuItem x:Name="RemoveModulesSettingsMenuItem" Header="{DynamicResource l_deleteModulesDB}" Click="RemoveModulesSettingsMenuItem_Handler"/>
+            <Separator Style="{StaticResource MenuItemVisibleForUpdate}"/>
+            <MenuItem Header="Отменить процедуру обновления ПО у всех модулей" 
+                      Style="{StaticResource MenuItemVisibleForUpdate}" 
+                      Click="CancelUpdateAllModuleSoftClick_Handler" />
+            <Separator Style="{StaticResource MenuItemVisibleForUpdate}"/>
+            <MenuItem x:Name="SaveModulesDescriptionMenuItem"
+                      Header="Сохранить описание модулей" 
+                      Click="SaveModulesDescriptionMenuItem_Click"
+                      Style="{StaticResource MenuItemEnabledOnRun}"/>
+            <MenuItem x:Name="UploadModulesDescriptionMenuItem"
+                      Header="Загрузить описание модулей" 
+                      Click="UploadModulesDescriptionMenuItem_Click"
+                      Style="{StaticResource MenuItemEnabledOnRun}"/>
+            <MenuItem x:Name="DeleteModulesDescriptionMenuItem"
+                      Header="Удалить описание модулей" 
+                      Click="DeleteModulesDescriptionMenuItem_Click"
+                      Style="{StaticResource MenuItemEnabledOnRun}"/>
+        </ContextMenu>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="331*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0" x:Name="menu1" Height="Auto" VerticalAlignment="Top" Grid.ColumnSpan="2" 
+              Style="{StaticResource ToolButtonDisabledOnUpdate}">
+            <MenuItem Header="{DynamicResource l_fileMenuItem}" Style="{StaticResource MenuItemBase}" >
+                <MenuItem Header="{DynamicResource l_newMenuItem}" Click="NewConfigClick_Handler" 
+                          Style="{StaticResource MenuItemDisabledOnRun}">
+                    <MenuItem.Icon>
+                        <Image Height="16" Width="16" Source="/AbakConfigurator;component/icons/new480.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{DynamicResource l_openMenuItem}" Click="OpenConfigHandler" 
+                          Style="{StaticResource MenuItemDisabledOnRun}">
+                    <MenuItem.Icon>
+                        <Image Height="16" Width="16" Source="/AbakConfigurator;component/icons/open480.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{DynamicResource l_saveMenuItem}" Click="SaveConfigHandler" 
+                          Style="{StaticResource MenuItemDisabledOnRun}">
+                    <MenuItem.Icon>
+                        <Image Height="16" Width="16" Source="/AbakConfigurator;component/icons/save480.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{DynamicResource l_saveAsMenuItem}" Click="SaveConfigAsHandler" 
+                          Style="{StaticResource MenuItemDisabledOnRun}">
+                    <MenuItem.Icon>
+                        <Image Height="16" Width="16" Source="/AbakConfigurator;component/icons/saveAs480.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem x:Name="AccountMenu" Header="{DynamicResource l_SecureMenuAccount}" Style="{StaticResource MenuItemBase}"  IsEnabled="{Binding IsRunning, Source={StaticResource currentState}}">
+                <!--
+                <MenuItem Click="AccountMenu_Click_Profile" Header="{DynamicResource l_SecureMenuAccount_Profile}" Style="{StaticResource MenuItemBase}"/>
+                -->
+                <MenuItem Click="AccountMenu_Click_Password" Header="{DynamicResource l_SecureMenuAccount_Password}" Style="{StaticResource MenuItemBase}"/>
+                <MenuItem Click="AccountMenu_Click_Journal" Header="{DynamicResource l_SecureMenuAccount_Journal}" Style="{StaticResource MenuItemBase}"/>
+                <MenuItem Click="AccountMenu_Click_Exit" Header="{DynamicResource l_SecureMenuAccount_Exit}" Style="{StaticResource MenuItemBase}"/>
+            </MenuItem>
+            <MenuItem x:Name="ManagementMenu" Header="{DynamicResource l_SecureMenuManagement}" Style="{StaticResource MenuItemBase}" IsEnabled="{Binding IsRunning, Source={StaticResource currentState}}" Visibility="{Binding Menu.Management, Source={StaticResource currentState}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <MenuItem Click="ManagementMenu_Click_Users" Header="{DynamicResource l_SecureMenuManagement_Users}" Style="{StaticResource MenuItemBase}"/>
+                <MenuItem Click="ManagementMenu_Click_Groups" Header="{DynamicResource l_SecureMenuManagement_Groups}" Style="{StaticResource MenuItemBase}"/>
+                <MenuItem Click="ManagementMenu_Click_Journal" Header="{DynamicResource l_SecureMenuManagement_Journal}" Style="{StaticResource MenuItemBase}"/>
+                <MenuItem Click="ManagementMenu_Click_Rules" Header="{DynamicResource l_SecureMenuManagement_Rules}" Style="{StaticResource MenuItemBase}"/>
+            </MenuItem>
+
+            <!--<MenuItem Header="{DynamicResource l_operationMenuItem}" Style="{StaticResource MenuItemBase}">
+                -->
+            <!--<MenuItem Header="{DynamicResource l_startMenuItem}" Click="StartMenuItem_Click_1" 
+                          Style="{StaticResource MenuItemDisabledOnRun}">
+                    <MenuItem.Icon>
+                        <Image Height="16" Width="16" Source="/AbakConfigurator;component/icons/start480.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{DynamicResource l_stopMenuItem}"  Click="StopMenuItem_Click" 
+                          Style="{StaticResource MenuItemEnabledOnRun}">
+                    <MenuItem.Icon>
+                        <Image Height="16" Width="16" Source="/AbakConfigurator;component/icons/stop480.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />-->
+            <!--
+                <MenuItem Header="{DynamicResource l_connSettMenuItem}" Click="MenuItem_Click" 
+                          Style="{StaticResource MenuItemDisabledOnRun}">
+                    <MenuItem.Icon>
+                        <Image Height="16" Width="16" Source="/AbakConfigurator;component/icons/settings480.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>-->
+            <!--
+            <MenuItem Header="{DynamicResource l_configMenuItem}" Style="{StaticResource MenuItemBase}">
+                <MenuItem Header="{DynamicResource l_writeToControllerMenuItem}" Click="WriteConfigToController_Handler" 
+                          Style="{StaticResource MenuItemDisabledOnRun}">
+                    <MenuItem.Icon>
+                        <Image Height="16" Width="16" Source="/AbakConfigurator;component/icons/download480.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{DynamicResource l_readFromControllerMenuItem}" Click="ReadConfigFromController_Handler" 
+                          Style="{StaticResource MenuItemDisabledOnRun}">
+                    <MenuItem.Icon>
+                        <Image Height="16" Width="16" Source="/AbakConfigurator;component/icons/upload480.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="{DynamicResource l_groupWritingMenuItem}" Click="TagsGroupWrite_Handler" 
+                          Style="{StaticResource MenuItemEnabledOnRun}">
+                    <MenuItem.Icon>
+                        <Image Height="16" Width="16" Source="/AbakConfigurator;component/icons/tags480.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            
+            <MenuItem x:Name="passwordMenu" Header="{DynamicResource l_passwordMenuItem}" 
+                      Style="{StaticResource MenuItemDisabledOnRun}" >
+                <MenuItem Header="{DynamicResource l_usersMenuItem}" Style="{StaticResource MenuItemBase}"
+                          Click="SecurityClick_Handler" >
+                    <MenuItem.Icon>
+                        <Image Height="16" Width="16" Source="/AbakConfigurator;component/icons/Key480.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{DynamicResource l_resetSessionMenuItem}" Style="{StaticResource MenuItemBase}" 
+                          Click="ResetSession_Handler"/>
+                <MenuItem Header="{DynamicResource l_deleteSessionMenuItem}" Style="{StaticResource MenuItemBase}" 
+                          Click="DeleteSession_Handler"/>
+            </MenuItem>
+            -->                       
+            <MenuItem Header="{DynamicResource l_controllerMenuItem}" Style="{StaticResource MenuItemBase}" 
+                      IsEnabled="{Binding IsRunning, Source={StaticResource currentState}}" Visibility="{Binding Menu.Control, Source={StaticResource currentState}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <MenuItem
+                    Header="  Настройки интерфейсов">
+                    <MenuItem Header="{DynamicResource l_interfacesMenuItem}" Click="InterfacesList_Handler" 
+                          Style="{StaticResource MenuItemBase}"/>
+                    <MenuItem Header="{DynamicResource l_serialInterfacesMenuItem}" Click="COMList_Handler" 
+                          Style="{StaticResource MenuItemBase}"/>
+                    <MenuItem x:Name= "IsUsbEnabled" Header="{DynamicResource l_usbInterfacesMenuItem}" 
+                          Click="USBsettings_Handler" Style="{StaticResource MenuItemBase}"/>
+                    <MenuItem Header="{DynamicResource l_firewallWindowName}" Click="FirewallList_Handler" 
+                          Style="{StaticResource MenuItemBase}"/>
+                    <MenuItem Header="{DynamicResource l_CanSpeedMenuItem}" Style="{StaticResource MenuItemBase}" 
+                          Click="ChangeCANSpeed_Click"/>
+                    <!--Раскомментить когда появятся удаленные шины-->
+                    <!--<MenuItem Header="Настройки удалённых корзин CAN-шины" Style="{StaticResource MenuItemBase}" 
+                          Click="SetCanBuses_Click"/>-->
+                </MenuItem>
+                <Separator/>
+                <MenuItem 
+                    Header="  Архивация и логирование">
+                    <MenuItem Header="{DynamicResource l_journalWindowsTitle}" Style="{StaticResource MenuItemBase}" 
+                          Click="showJournalsWindow_Handler"/>
+                    <MenuItem Header="{DynamicResource l_saveLogInController}" Click="SaveLogInController_Handler" 
+                          Style="{StaticResource MenuItemBase}"/>
+                    <MenuItem Header="Удалить логи контроллера" Click="DeleteLogsInController_Handler" 
+                          Style="{StaticResource MenuItemBase}"/>
+                    <!--раскомментить в 5 5 0-->
+                    <!--<MenuItem Header="Журнал последовательности событий (SoE)" Click="showSequenceOfEventsWindow_Handler"
+                          Style="{StaticResource MenuItemBase}"/>-->
+                </MenuItem>
+                <Separator/>
+                <!--<MenuItem Header="  МЭК">-->
+                <MenuItem Header="МЭК конфигуратор" Click="IECOpen_Click" Style="{StaticResource MenuItemBase}"/>
+                <!--</MenuItem>-->
+                <Separator/>
+                <MenuItem
+                    Header="  Codesys">
+                    <MenuItem 
+                        Header="{DynamicResource l_deleteCodeSysAppMenuItem}" 
+                        Click="DeleteCodeSysApp_Handler" 
+                        Style="{StaticResource MenuItemBase}" 
+                        Visibility="{Binding Menu.RemoteCodesysApp, Source={StaticResource currentState}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <MenuItem 
+                        Header="Изменить состояние сторожевого таймера Codesys" 
+                        Click="CodesysWdtClick_Handler" 
+                        Style="{StaticResource MenuItemBase}"/>
+                    <MenuItem 
+                        Header="Перезапустить Codesys" 
+                        Click="RestartCodesys_Handler" 
+                        Style="{StaticResource MenuItemBase}"/>
+                    <MenuItem 
+                        Header="Настройки Codesys" 
+                        x:Name="CodesysSettings"
+                        Click="CodesysSettings_Click"  
+                        Style="{StaticResource MenuItemBase}" 
+                        Visibility="{Binding Menu.RemoteCodesysApp, Source={StaticResource currentState}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <MenuItem 
+                        Header="Выгрузить исходный код проекта Codesys"
+                        Click="DownloadSourceCode_Handler"
+                        Style="{StaticResource MenuItemBase}"
+                        Visibility="{Binding Menu.RemoteCodesysApp, Source={StaticResource currentState}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                </MenuItem>
+                <Separator/>
+                <!--<MenuItem Header="{DynamicResource l_startAbakMenuItem}" Click="StartAbak_Handler" 
+                          Style="{StaticResource MenuItemBase}" Visibility="{Binding Menu.RemoteStart, Source={StaticResource currentState}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <MenuItem Header="{DynamicResource l_stopAbakMenuItem}" Click="StopAbak_Handler" 
+                          Style="{StaticResource MenuItemBase}" Visibility="{Binding Menu.RemoteShutdown, Source={StaticResource currentState}, Converter={StaticResource BooleanToVisibilityConverter}}"/>-->
+                <MenuItem
+                    x:Name="StopAbak"
+                    Header="{DynamicResource l_stopAbakMenuItem}" Click="StopAbak_Handler" 
+                          Style="{StaticResource MenuItemBase}"/>
+                <MenuItem Header="{DynamicResource l_restartAbakMenuItem}" Click="RestartAbak_Handler" 
+                          Style="{StaticResource MenuItemBase}" Visibility="{Binding Menu.RemoteRestart, Source={StaticResource currentState}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <MenuItem Header="{DynamicResource l_rebootAbakMenuItem}" Click="RebootAbak_Handler" 
+                          Style="{StaticResource MenuItemBase}" Visibility="{Binding Menu.RemoteReboot, Source={StaticResource currentState}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <MenuItem x:Name="WDTstatus" Header="Изменить состояние сторожевого таймера" Style="{StaticResource MenuItemBase}" 
+                          Click="WDTClick_Handler" />
+                <MenuItem x:Name="SingleCpuStatus" Header="Изменить режим работы ПЛК" Style="{StaticResource MenuItemBase}" 
+                          Click="SingleCpuStatusClick_Handler"/>
+                <Separator/>
+                 <MenuItem Header="Настройки резервирования" x:Name="RedundancySettings"
+                          Click="RedundancySettings_Handler" 
+                          Style="{StaticResource MenuItemBase}"/>
+                <Separator x:Name="RedundancySeparator"/>
+                <MenuItem Header="{DynamicResource l_synchTimeMenuItem}" Style="{StaticResource MenuItemBase}"
+                          Click="WritePCTimeToController_Handler"/>
+                <MenuItem Header="{DynamicResource l_moduleTemplatesWindowsName}" Style="{StaticResource MenuItemBase}" Click="EditControllersTemplatesClick_Handler"/>
+                <Separator/>
+                <MenuItem Header="{DynamicResource l_updateWindowTitle}" Style="{StaticResource MenuItemBase}" 
+                          Click="UpdateControllerClick_Handler" />
+                <MenuItem x:Name="PrepareMicroSD" Header="{DynamicResource l_serviceMakeImageMenuItem}" Click="PrepareMicroSDForImage_Handler" Style="{StaticResource MenuItemBase}"/>
+                <MenuItem x:Name="LicensesItem" Header="Список лицензий контроллера" Style="{StaticResource MenuItemBase}" 
+                          Click="LicensesClick_Handler"/>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource l_additionalMenuItem}" Style="{StaticResource MenuItemBase}" >
+                <MenuItem Header="{DynamicResource l_appSettingsMenuItem}" Style="{StaticResource MenuItemBase}" 
+                          Click="ShowAppSettings_Handler"/>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource l_aboutMenuItem}"  Style="{StaticResource MenuItemBase}" Click="ShowAboutWindow_Handler"/>
+        </Menu>
+        <ToolBar Grid.Row="1" Height="Auto" Margin="0" Padding="0,0,0,0" x:Name="toolBar1" VerticalAlignment="Top" Grid.ColumnSpan="2" 
+                 Style="{StaticResource ToolButtonDisabledOnUpdate}">
+            <Button x:Name="NewToolButton" ToolTip="{DynamicResource l_newMenuItem}" 
+                    Style="{StaticResource ToolButtonDisabledOnRn}" Visibility="Collapsed"
+                    Click="NewConfigClick_Handler">
+                <Image Visibility="Collapsed" IsEnabled="False" Width="32" Height="32" Source="/AbakConfigurator;component/icons/new480.png" />
+            </Button>
+            <Button x:Name="OpenToolButton" ToolTip="{DynamicResource l_openMenuItem}" 
+                    Style="{StaticResource ToolButtonDisabledOnRn}" Visibility="Collapsed"
+                    Click="OpenConfigHandler">
+                <Image Visibility="Collapsed"  Width="32" Height="32" Source="/AbakConfigurator;component/icons/open480.png" />
+            </Button>
+            <Button Visibility="Collapsed" x:Name="SaveToolButton" ToolTip="{DynamicResource l_saveMenuItem}" Style="{StaticResource ToolButtonDisabledOnRn}" 
+                    Click="SaveConfigHandler">
+                <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/save480.png" />
+            </Button>
+            <Button Visibility="Collapsed" x:Name="SaveAsToolButton" ToolTip="{DynamicResource l_saveAsMenuItem}" Style="{StaticResource ToolButtonDisabledOnRn}" 
+                    Click="SaveConfigAsHandler">
+                <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/saveAs480.png" />
+            </Button>
+            <Separator Visibility="Collapsed"/>
+            <Separator Visibility="Collapsed"/>
+            <Button ToolTip="Подключение через Micro USB / USB Type-C" Style="{StaticResource ToolButtonDisabledOnRn}" 
+                    Click="ConnectViaUsb_Click">
+                <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/usb.png" />
+            </Button>
+            <Button ToolTip="Подключение через Ethernet" Style="{StaticResource ToolButtonDisabledOnRn}" 
+                    Click="ConnectViaEthernet_Click">
+                <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/ethernet.png" />
+            </Button>
+            <Separator/>
+            <Button x:Name="StopToolButton" ToolTip="{DynamicResource l_stopMenuItem}" Style="{StaticResource ToolButtonEnabledOnRun}" 
+                    Click="StopMenuItem_Click">
+                <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/stop480.png" />
+            </Button>
+            <Separator/>
+            <Button x:Name="DownloadToolButton" ToolTip="{DynamicResource l_writeToControllerMenuItem}" 
+                    Style="{StaticResource ToolButtonEnabledOnRun}" Click="WriteConfigToController_Handler">
+                <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/download480.png" />
+            </Button>
+            <Button x:Name="UploadToolButton" ToolTip="{DynamicResource l_readFromControllerMenuItem}" 
+                    Style="{StaticResource ToolButtonEnabledOnRun}" Click="ReadConfigFromController_Handler">
+                <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/upload480.png" />
+            </Button>
+            <!-- DEBUG PART: -->
+            <Separator Visibility="Collapsed" />
+            <Button Visibility="Collapsed" x:Name="NaladchikButton" ToolTip="Всё что нужно"  Click="Naladchik_Click" >
+                <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/crut.png" 
+                       Visibility="{Binding IsRunning, ConverterParameter=Visible, Converter={StaticResource currentState}, 
+                    Source={StaticResource currentState}}"/>
+            </Button>
+            <Button Visibility="Collapsed" x:Name="DebugButton" ToolTip="Всё что нужно"  Click="Debug_Click" >
+                <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/djuster.png"/>
+            </Button>
+        </ToolBar>
+        <!--Тут модули-->
+        <Grid Grid.Row="2" Margin="0" Grid.ColumnSpan="2" x:Name="GeneralGrid" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300*" />
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="1000*" />
+            </Grid.ColumnDefinitions>
+            <GridSplitter Grid.Column="1" x:Name="gridSplitter1" HorizontalAlignment="Center" 
+                          VerticalAlignment="Stretch" Width="5"/>
+            <TreeView x:Name="groupsTreeView" ItemsSource="{Binding Config.GroupsList}"
+                      MouseLeftButtonUp="TreeViewMouseLeftButtonUp_Handler" Style="{StaticResource ToolButtonDisabledOnUpdate}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding GroupsList}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding ImageSource}" Stretch="Uniform" Height="16"/>
+                            <Label Content="{Binding Name}" Margin="2, 2, 2, 2" Padding="0" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            <ListView Grid.Column="2" Visibility="Hidden" x:Name="tagsListView" VirtualizingPanel.IsVirtualizing="True" ScrollViewer.IsDeferredScrollingEnabled="True" VirtualizingPanel.IsVirtualizingWhenGrouping="True" ScrollViewer.ScrollChanged="ListViewScrollChanged_Handler"
+                      ItemsSource="{Binding Source={StaticResource paramsSRC}}" MouseDown="ListViewMouseDown_Handler">
+                <ListView.GroupStyle>
+                    <GroupStyle HidesIfEmpty="True">
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Margin" Value="0,0,0,5"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type GroupItem}">
+                                            <Expander x:Name="expander" IsExpanded="True" BorderBrush="#FFA4B97F"
+                                                      BorderThickness="0,0,0,1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                                <Expander.Header>
+                                                    <TextBlock FontWeight="Bold" Text="{Binding Name}" Margin="5,0,0,0"
+                                                               Width="{Binding ActualWidth, ElementName=tagsListView}"/>
+                                                </Expander.Header>
+                                                <ItemsPresenter />
+                                            </Expander>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </ListView.GroupStyle>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="Margin" Value="0,0,0,0" />
+                        <Setter Property="Padding" Value="0,0,0,0" />
+                        <Setter Property="Height" Value="25" />
+                        <EventSetter Event="UIElement.MouseUp" Handler="ListViewItemMouseUp_Handler" />
+                        <EventSetter Event="UIElement.KeyUp" Handler="listViewItemKeyUp_Handler" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#F1EFE2" />
+                            </Trigger>
+                            <DataTrigger Binding="{Binding ReadOnly}" Value="True">
+                                <Setter Property="Background" Value="#EBEBEB" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ReadOnly}" Value="False">
+                                <Setter Property="Background" Value="White" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    <GridView AllowsColumnReorder="True">
+                        <GridViewColumn Header="" Width="auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Width="16" Height="16" 
+                                           Visibility="{Binding ReadOnly, ConverterParameter=Visible, Converter={StaticResource visibilityConverter}}" 
+                                           Source="/AbakConfigurator;component/icons/lock16.png" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <!--Название параметра в человеческом виде-->
+                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="auto">
+                            <GridViewColumnHeader Content="{DynamicResource l_paramName}" SizeChanged="GridViewColumnHeader_SizeChanged"/>
+                        </GridViewColumn>
+                        <!--Текущее значение параметра-->
+                        <GridViewColumn x:Name="valueCol" Width="auto" >
+                            <GridViewColumnHeader Content="{DynamicResource l_paramValue}" SizeChanged="GridViewColumnHeader_SizeChanged"/>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <local:ListItemParamControl Width="{Binding ElementName=valueCol, Path=ActualWidth}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <!--Тип данных-->
+                        <GridViewColumn DisplayMemberBinding="{Binding TypeString}" Width="auto">
+                            <GridViewColumnHeader Content="{DynamicResource l_paramType}" SizeChanged="GridViewColumnHeader_SizeChanged"/>
+                        </GridViewColumn>
+                        <!--Уникальный тег параметра-->
+                        <GridViewColumn DisplayMemberBinding="{Binding Tagname}" 
+                                        Width="auto">
+                            <GridViewColumnHeader Content="{DynamicResource l_paramTag}" SizeChanged="GridViewColumnHeader_SizeChanged"/>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                <ListView.ContextMenu>
+                    <ContextMenu StaysOpen="False">
+                        <MenuItem x:Name="ChangeParamMenuItem" Header="{DynamicResource l_editParam}" Visibility="Collapsed" />
+                        <MenuItem x:Name="DeleteParamMenuItem" Header="{DynamicResource l_deleteParam}" Visibility="Collapsed"/>
+                        <Separator Visibility="Collapsed"/>
+                        <MenuItem Header="{DynamicResource l_copyTagName}" Click="CopyXparamTagName_Handler" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
+            </ListView>
+
+            <TabControl x:Name="modulesInfoTabControl"  Grid.Column="2" Visibility="Collapsed">
+                <TabItem Header="{DynamicResource l_generalModulesSettings}" x:Name="generalModulesSettings" 
+                         Style="{StaticResource ToolButtonDisabledOnUpdate}" >
+                    <!--Общие настройки для всех модулей-->
+                    <Grid x:Name="allModulesSettings" Style="{StaticResource ToolButtonDisabledOnUpdate}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="11*"/>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="141*"/>
+                            <ColumnDefinition Width="7*"/>
+                            <ColumnDefinition Width="695*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <GroupBox Style="{StaticResource GroupBoxEnabledOnRun}" HorizontalAlignment="Left" 
+                                  Height="154" Margin="10,10,0,0" Grid.Row="0" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="5">
+                            <GroupBox.Header>
+                                <CheckBox Content="{DynamicResource l_modulesHearbeat}" 
+                                          IsChecked="{Binding ModulesList.EnableHeartBeat, ElementName=window, Mode=TwoWay}"/>
+                            </GroupBox.Header>
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0" Content="{DynamicResource l_hearbeatPeriod}" 
+                                       Height="26" VerticalAlignment="Top" />
+                                <TextBox Grid.Row="0" Grid.Column="1" Margin="0, 2" Width="100" 
+                                         Text="{Binding ModulesList.ProducerPeriod, ElementName=window, Mode=TwoWay}" IsEnabled="False"/>
+                                <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="{DynamicResource l_hearbeatConsumer}">
+                                    <Grid >
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition  Height="auto"/>
+                                            <RowDefinition  Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Row="0" Grid.Column="0" Content="{DynamicResource l_consumerNodeID}" />
+                                        <TextBox Grid.Row="0" Grid.Column="1" Margin="0, 2" Width="100" 
+                                                 Text="{Binding ModulesList.ConsumerNodeID, ElementName=window, Mode=TwoWay}" 
+                                                 IsEnabled="False"/>
+                                        <Label Grid.Row="1" Grid.Column="0" Content="{DynamicResource l_consumerPeriod}" />
+                                        <TextBox Grid.Row="1" Grid.Column="1" Margin="0, 2" Width="100" 
+                                                 Text="{Binding ModulesList.ConsumerPeriod, ElementName=window, Mode=TwoWay}" 
+                                                 IsEnabled="False"/>
+                                        <Button Grid.Row="2" Content="{DynamicResource l_save}"  Height="25" Margin="5,5"  
+                                                Click="saveSynchronizationSettings_Handler" Grid.ColumnSpan="2"/>
+                                    </Grid>
+                                </GroupBox>
+                            </Grid>
+                        </GroupBox>
+
+                    </Grid>
+                </TabItem>
+                <TabItem x:Name="ModulesUpdateGrid" Header="Обновление модулей" Height="22" VerticalAlignment="Top" Visibility="Collapsed">
+                    <Grid x:Name="GridName">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions >
+                        <ToolBar Height="40" VerticalAlignment="Top" Grid.Row="0" Grid.ColumnSpan="2" x:Name="ToolBarForUpdate">
+                            <Button x:Name="DownloadImage" Click="UpdateModulesSoftClick_Handler" Style="{StaticResource ToolButtonDisabledOnUpdate}" ToolTip="Добавить образ">
+                                <Button.Content>
+                                    <Image Width="30" Height="30" Source="/AbakConfigurator;component/icons/download480.png"/>
+                                </Button.Content>
+                            </Button>
+                            <Button x:Name="StartUpdate" ToolTip="Начать обновление модулей" Click="UpdateAllModules_Click" Style="{StaticResource ToolButtonDisabledOnUpdate}">
+                                <Image Width="30" Height="30" Source="/AbakConfigurator;component/icons/start480.png" />
+                            </Button>
+                            <Button x:Name="StopUpdate" ToolTip="Отменить обновление модулей" Click="CancelUpdateAllModuleSoftClick_Handler" Style="{StaticResource ToolButtonEnabledOnUpdate}">
+                                <Image Width="30" Height="30" Source="/AbakConfigurator;component/icons/stop480.png" />
+                            </Button>
+                            <Button x:Name="UpdatedList" ToolTip="Список обновленных модулей" Click="ListOfUpdatedModulesClick_Handler" Style="{StaticResource ToolButtonDisabledOnUpdate}">
+                                <Image Width="30" Height="30" Source="/AbakConfigurator;component/icons/new480.png" />
+                            </Button>
+                            <Button x:Name="RefreshData" ToolTip="Обновить информацию о модулях" Click="Refreshtem_Click" Style="{StaticResource ToolButtonDisabledOnUpdate}">
+                                <Image Width="26" Height="26" Source="/AbakConfigurator;component/icons/refresh480.png" />
+                            </Button>
+                        </ToolBar>
+                        <DataGrid Grid.Row="1" x:Name="modulesDataGrid" ItemsSource="{Binding Config.Modules.GroupsList}" AutoGenerateColumns="False" ContextMenu="{StaticResource moduleContextMenu}" IsReadOnly="True"
+                              MouseDown="modulesDataGridMouseDown_Handler" MouseDoubleClick="modulesDatagridMouseDoubleClick_Handler" VerticalAlignment="Stretch" Grid.ColumnSpan="2" >
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <CheckBox x:Name="MainTick" Width="16" Style="{StaticResource ToolButtonDisabledOnUpdate}" HorizontalAlignment="Center" Click="ChooseAllModulesButton" IsChecked="{Binding Path=DataContext.AllSelected, UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Name="boolCB" Click="IsChanged" Width="16" Style="{StaticResource ToolButtonDisabledOnUpdate}" HorizontalAlignment="Center" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Header="№" Binding="{Binding NodeID}" MinWidth="30"/>
+                                <DataGridTextColumn Header="Тип модуля" Binding="{Binding Module_Name}" MinWidth="150" Visibility="{Binding Data.Config.EnableModuleUpdate, Source={StaticResource Proxy}, ConverterParameter=Visible,  Converter={StaticResource visibilityConverter}}" />
+                                <DataGridTextColumn Header="Ревизия" Binding="{Binding Revision}" MinWidth="60"/>
+                                <DataGridTextColumn Header="Состояние Модуля" Binding="{Binding StateString}" MinWidth="150" />
+                                <DataGridTextColumn Header="Версия ПО" MinWidth="90" Binding="{Binding SoftVersion}" Visibility="{Binding Data.Config.EnableModuleUpdate, Source={StaticResource Proxy}, ConverterParameter=Visible,  Converter={StaticResource visibilityConverter}}" />
+                                <DataGridTextColumn Header="Версия платы" MinWidth="95" Binding="{Binding HardVersion}" Visibility="{Binding Data.Config.EnableModuleUpdate, Source={StaticResource Proxy}, ConverterParameter=Visible, Converter={StaticResource visibilityConverter}}"/>
+                                <DataGridTextColumn Header="Артикул" MinWidth="95" Binding="{Binding OrderCode}" Visibility="{Binding Data.Config.EnableModuleUpdate, Source={StaticResource Proxy}, ConverterParameter=Visible, Converter={StaticResource visibilityConverter}}"/>
+                                <DataGridTemplateColumn Width="*" MaxWidth="500" MinWidth="100" Header="Прогресс" Visibility="{Binding Data.Config.EnableModuleUpdate, Source={StaticResource Proxy}, ConverterParameter=Visible, Converter={StaticResource visibilityConverter}}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <ProgressBar Name="progressBar1" Minimum="0" Maximum="100" Value="{Binding Progress}">
+                                                    <ProgressBar.Foreground>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="100,0" MappingMode="Absolute">
+                                                            <GradientStop Color="ForestGreen" Offset="{Binding GreenColor}" ></GradientStop>
+                                                            <GradientStop Color="#ff3d33" Offset="{Binding RedColor}" ></GradientStop>
+                                                        </LinearGradientBrush>
+                                                    </ProgressBar.Foreground>
+                                                </ProgressBar>
+                                                <TextBlock Text="{Binding StringFormat=\{0\}%, Path=Progress}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Состояние обновления" MinWidth="150" Binding="{Binding UpdateText}" Visibility="{Binding Data.Config.EnableModuleUpdate, Source={StaticResource Proxy}, ConverterParameter=Visible,  Converter={StaticResource visibilityConverter}}"  />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+
+            </TabControl>
+            <!--Настройки модуля-->
+            <Grid Grid.Column="2" x:Name="moduleGrid" Visibility="Hidden">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="{Binding SelectedModule.ShortDescription, ElementName=window, Mode=Default}" Background="#FFE2E0E0" FontWeight="Bold" />
+                <ListView Grid.Row="1" x:Name="modulesTagsListView" VirtualizingPanel.IsVirtualizing="True" ScrollViewer.IsDeferredScrollingEnabled="True" VirtualizingPanel.IsVirtualizingWhenGrouping="True" ScrollViewer.ScrollChanged="ModuleListViewScrollChanged_Handler" ItemsSource="{Binding Source={StaticResource modulesValuesSRC}}" >
+                    <ListView.GroupStyle>
+                        <GroupStyle HidesIfEmpty="True">
+                            <GroupStyle.ContainerStyle>
+                                <Style TargetType="{x:Type GroupItem}">
+                                    <Setter Property="Margin" Value="0,0,0,5"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                <Expander x:Name="expander" IsExpanded="True" BorderBrush="#FFA4B97F" BorderThickness="0,0,0,1" HorizontalAlignment="Stretch">
+                                                    <Expander.Header>
+                                                        <TextBlock FontWeight="Bold" Text="{Binding Name}" Margin="5,0,0,0" Width="{Binding ActualWidth, ElementName=modulesTagsListView}"/>
+                                                    </Expander.Header>
+                                                    <ItemsPresenter />
+                                                </Expander>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.ContainerStyle>
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Setter Property="Margin" Value="0,0,0,0" />
+                            <Setter Property="Padding" Value="0,0,0,0" />
+                            <Setter Property="Height" Value="25" />
+                            <EventSetter Event="UIElement.MouseUp" Handler="ModulesTagsViewItemMouseUp_Handler" />
+                            <EventSetter Event="UIElement.KeyUp" Handler="listViewItemKeyUp_Handler" />
+                            <Setter Property="ToolTip">
+                                <Setter.Value>
+                                    <UniformGrid Columns="1">
+                                        <TextBlock Text="{Binding Hint}"/>
+                                    </UniformGrid>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#F1EFE2" />
+                                </Trigger>
+                                <DataTrigger Binding="{Binding ReadOnly}" Value="True">
+                                    <Setter Property="Background" Value="#EBEBEB" />
+                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding ReadOnly}" Value="True" />
+                                        <Condition Binding="{Binding Backlight_on}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Background" Value="#EBEBEB"/>
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding ReadOnly}" Value="False" />
+                                        <Condition Binding="{Binding Backlight_on}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Background" Value="#FFFFFF"/>
+                                </MultiDataTrigger>
+                                <DataTrigger Binding="{Binding Backlight_on}" Value="True">
+                                    <Setter Property="Background" Value="#32CD32" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Hint}" Value="">
+                                    <Setter Property="ToolTip" Value="{x:Null}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="True">
+                            <!--Название параметра в человеческом виде-->
+                            <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="auto">
+                                <GridViewColumnHeader Content="{DynamicResource l_paramName}" SizeChanged="GridViewColumnHeader_SizeChanged"/>
+                            </GridViewColumn>
+                            <!--Текущее значение параметра модуля-->
+                            <GridViewColumn x:Name="moduleValueCol" Width="auto">
+                                <GridViewColumnHeader Content="{DynamicResource l_paramValue}" SizeChanged="GridViewColumnHeader_SizeChanged"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <local:ListItemParamControl Width="{Binding ElementName=moduleValueCol, Path=ActualWidth}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <!--Уникальный тег параметра-->
+                            <GridViewColumn DisplayMemberBinding="{Binding Tagname}" Width="auto">
+                                <GridViewColumnHeader Content="{DynamicResource l_paramTag}" SizeChanged="GridViewColumnHeader_SizeChanged"/>
+                            </GridViewColumn>
+                            <GridViewColumn Width="auto">
+                                <GridViewColumnHeader Content="Описание" SizeChanged="GridViewColumnHeader_SizeChanged"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <local:DescriptionParamControl Width="{Binding ElementName=moduleValueCol, Path=ActualWidth}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <WrapPanel Grid.Row="2">
+                    <Button Content="{DynamicResource l_refresh}" 
+                            Width="250" Height="25" Margin="5,5" 
+                            
+                            Click="updateModuleVlues_Handler" >
+
+                    </Button>
+
+                    <GroupBox Style="{StaticResource ButtonEnabledOnRun}">
+                        <GroupBox.Header>
+                            <CheckBox Content="{DynamicResource l_autorefresh}" VerticalAlignment="Center" IsChecked="{Binding Path=EnableModuleUpdateTimer, Mode=TwoWay}"/>
+                        </GroupBox.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="{DynamicResource l_periodsec}"/>
+                            <TextBox x:Name="moduleUpdatePeriodTextBox" Grid.Column="1" Margin="2, 2, 2, 2" Text="{Binding Path=ModuleUpdatePeriod, Mode=TwoWay}" PreviewTextInput="moduleUpdatePeriodTextBox_PreviewInput"/>
+                        </Grid>
+                    </GroupBox>
+                </WrapPanel>
+            </Grid>
+        </Grid>
+        <StatusBar x:Name="PlcStatusBar" Grid.Row="3" Grid.ColumnSpan="2">
+            <StatusBarItem Visibility="{Binding IsRunning, ConverterParameter=Collapsed, Converter={StaticResource currentState}, Source={StaticResource currentState}}">
+                <TextBlock x:Name="PollStopped" Padding="5, 5, 5, 5" Text="{DynamicResource l_pollStopped}" />
+            </StatusBarItem>
+            <StatusBarItem Visibility="{Binding IsRunning, ConverterParameter=Visible, Converter={StaticResource currentState}, Source={StaticResource currentState}}">
+                <TextBlock Padding="5, 5, 5, 5" Text="{Binding IsConnected, ConverterParameter=IsConnected, Converter={StaticResource currentState}, Source={StaticResource currentState}}" Background="{Binding IsConnected, ConverterParameter=Background, Converter={StaticResource currentState}, Source={StaticResource currentState}}"/>
+            </StatusBarItem>
+            <StatusBarItem Visibility="{Binding IsRunning, ConverterParameter=Visible, Converter={StaticResource currentState}, Source={StaticResource currentState}}">
+                <TextBlock Padding="5, 5, 5, 5" Text="{Binding IP, Source={StaticResource currentState}}" />
+            </StatusBarItem>
+            <StatusBarItem Visibility="{Binding IsRunning, ConverterParameter=Visible, Converter={StaticResource currentState}, Source={StaticResource currentState}}">
+                <TextBlock Padding="5, 5, 5, 5" Text="{Binding Serial, Source={StaticResource currentState}}" />
+            </StatusBarItem>
+            <StatusBarItem Visibility="{Binding IsRunning, ConverterParameter=Visible, Converter={StaticResource currentState}, Source={StaticResource currentState}}">
+                <TextBlock Padding="5, 5, 5, 5" Text="{Binding AssemblyString, Source={StaticResource currentState}}" />
+            </StatusBarItem>
+            <StatusBarItem x:Name="ModulesCollectionVersion"
+                Visibility="{Binding IsRunning, ConverterParameter=Visible, Converter={StaticResource currentState}, Source={StaticResource currentState}}">
+                <TextBlock Padding="5, 5, 5, 5" Text="{Binding ModulesCollectionVersion, Source={StaticResource currentState}}" />
+            </StatusBarItem>
+            <StatusBarItem x:Name="Description"
+                Visibility="{Binding IsRunning, ConverterParameter=Visible, Converter={StaticResource currentState}, Source={StaticResource currentState}}">
+                <TextBlock Padding="5, 5, 5, 5" Text="{Binding Caption, Source={StaticResource currentState}}" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Padding="5, 5, 5, 5" Text="{Binding ConfigPath, Source={StaticResource currentState}}" />
+            </StatusBarItem>
+            <StatusBarItem Visibility="{Binding Update_On, ConverterParameter=Visible, Converter={StaticResource updVisibility}, Source={StaticResource currentState}}">
+                <TextBlock Padding="5, 5, 5, 5" Text="{Binding UpdatedModules, Source={StaticResource currentState}}"  />
+            </StatusBarItem>
+            <StatusBarItem x:Name="Naladchik" Visibility="{Binding IsRunning, ConverterParameter=Visible, Converter={StaticResource currentState}, Source={StaticResource currentState}}">
+                <TextBlock Padding="5, 5, 5, 5" Text="Режим наладчика активирован!" FontSize="16" Foreground="Black" Background="Green"/>
+            </StatusBarItem>
+            <StatusBarItem x:Name="SingleCPU" Style="{StaticResource CpuSingleState}">
+                <TextBlock Padding="5, 5, 5, 5" Text="Безмодульный режим!" FontSize="16" Foreground="Black" Background="Yellow" ToolTip="В этом режиме контроллер не сможет взаимодействовать с модулями ввода/вывода и другими ЦПУ"/>
+            </StatusBarItem>
+            <StatusBarItem x:Name="CodesysWatchDog" Style="{StaticResource CpuSingleState}">
+                <TextBlock Padding="5, 5, 5, 5" Text="WatchDog Codesys выключен!" FontSize="16" Foreground="Black" Background="Red"
+                           ToolTip="Параметр 'CDS_WATHCDOG_ENABLE'"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
+

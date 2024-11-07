@@ -1,0 +1,90 @@
+﻿<Window x:Class="AbakConfigurator.UpdateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        mc:Ignorable="d"
+        Title="{DynamicResource l_updateWindowTitle}" 
+        Height="397" Width="531"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        local:HelpProvider.HelpAlias="IDH_TOPIC_OKNO__OBNOVLENIE_PO_">
+    <Window.Resources>
+        <local:VisibilityConverter x:Key="VisibilityConverter"/>
+        <Style x:Key="DisabledStyle">
+            <Style.Triggers>
+                <Trigger Property="UIElement.IsEnabled" Value="False">
+                    <Setter Property="UIElement.Opacity" Value="0.5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <!-- Стиль элемента который разрешен при выключенном опросе контроллера -->
+        <Style x:Key="ToolButtonDisabledOnRun" BasedOn="{StaticResource DisabledStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CommandRunning}" Value="True">
+                    <Setter Property="UIElement.IsEnabled" Value="False" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CommandRunning}" Value="False">
+                    <Setter Property="UIElement.IsEnabled" Value="True" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <CollectionViewSource x:Key="backupsSRC" Source="{Binding BackupsList}"/>
+    </Window.Resources>
+    <Grid>
+        <TabControl>
+            <TabItem Header="{DynamicResource l_tabUpdates}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <ToolBar Grid.Row="0">
+                        <Button x:Name="UploadUpdateToolButton" ToolTip="{DynamicResource l_updateWindowUpdateUploadButton}" Click="UploadUpdateButton_Handler" Style="{StaticResource ToolButtonDisabledOnRun}" >
+                            <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/download480.png" />
+                        </Button>
+                    </ToolBar>
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding CommandRunning, ConverterParameter=Visible, Converter={StaticResource VisibilityConverter}}" >
+                        <Label Content="{Binding OperationName}" FontSize="14" HorizontalAlignment="Center"/>
+                        <Label Content="{Binding StatusRunning}" FontSize="14" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{DynamicResource l_tabReservCopies}" Visibility="Collapsed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <ToolBar Grid.Row="0">
+                        <Button x:Name="UploadToolButton" ToolTip="{DynamicResource l_updateWindowUploadButton}" Click="UploadBackupButton_Handler" Style="{StaticResource ToolButtonDisabledOnRun}" >
+                            <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/upload480.png" />
+                        </Button>
+                        <Button x:Name="DownloadToolButton" ToolTip="{DynamicResource l_updateWindowDownloaddButton}" Click="DownloadBackupButton_Handler" Style="{StaticResource ToolButtonDisabledOnRun}" >
+                            <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/download480.png" />
+                        </Button>
+                        <Separator/>
+                        <Button x:Name="DeleteToolButton" ToolTip="{DynamicResource l_updateWindowDeleteBackupButton}" Click="DeleteButton_Handler" Style="{StaticResource ToolButtonDisabledOnRun}" >
+                            <Image Width="32" Height="32" Source="/AbakConfigurator;component/icons/delete480.png" />
+                        </Button>
+                    </ToolBar>
+                    <ListView x:Name="backupsListView" Grid.Row="1" ItemsSource="{Binding Source={StaticResource backupsSRC}}">
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="True">
+                                <GridViewColumn Header="{DynamicResource l_updWindSerialCol}" DisplayMemberBinding="{Binding Serial}"/>
+                                <GridViewColumn Header="{DynamicResource l_updWindAssemblyCol}" DisplayMemberBinding="{Binding Assembly}"/>
+                                <GridViewColumn Header="{DynamicResource l_updWindDateCol}" DisplayMemberBinding="{Binding CreateDate, StringFormat=dd.MM.yyyy HH:mm}"/>
+                                <GridViewColumn Header="{DynamicResource l_updWindDescrCol}" DisplayMemberBinding="{Binding Description}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding CommandRunning, ConverterParameter=Visible, Converter={StaticResource VisibilityConverter}}" >
+                        <Label Content="{Binding OperationName}" FontSize="14" HorizontalAlignment="Center"/>
+                        <Label Content="{Binding StatusRunning}" FontSize="14" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>

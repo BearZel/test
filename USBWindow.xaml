@@ -1,0 +1,81 @@
+﻿<Window x:Class="AbakConfigurator.USBWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        xmlns:m ="clr-namespace:AbakConfigurator"
+        mc:Ignorable="d"
+        Title= "{DynamicResource  l_usb_title_Window}" Height="460" Width="247"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <Grid x:Name="GRID">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="130"/>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+        <ToolBar Height="auto" VerticalAlignment="Top" Grid.Row="0" Grid.ColumnSpan="2">
+            <Button x:Name="RefreshInterfacesButton" Click="RefreshButton_Handler" ToolTip="{DynamicResource l_refresh}">
+                <Button.Content>
+                    <Image Width="24" Height="24" Source="/AbakConfigurator;component/icons/update480.png" />
+                </Button.Content>
+            </Button>
+        </ToolBar>
+        <!-- Поле CPU -->
+        <GroupBox Grid.Row="1" Header="CPU USB" Padding="10" Grid.ColumnSpan="1" Margin="0,10,170,10" RenderTransformOrigin="0.51,0.893">
+            <ItemsControl ItemsSource="{Binding CPUCheckBoxes}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="1" Rows="4" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Content="{Binding Name}" IsChecked="{Binding Work}" IsEnabled="{Binding Block}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </GroupBox>
+        <!-- Поле IM 1 -->
+        <GroupBox x:Name="IM1_FIELD"  Header="IM 1 USB" 
+         Padding="10" Grid.ColumnSpan="1" Margin="0,10,170,10" RenderTransformOrigin="0.51,0.893">
+            <ItemsControl ItemsSource="{Binding IM_1CheckBoxes}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="1" Rows="2" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Content="{Binding Name}" IsChecked="{Binding Work}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </GroupBox>
+        <!-- Поле IM 2 -->
+        <GroupBox x:Name="IM2_FIELD"   Header="IM 2 USB" Padding="10" Grid.ColumnSpan="1" Margin="0,10,170,10" RenderTransformOrigin="0.51,0.893">
+            <ItemsControl ItemsSource="{Binding IM_2CheckBoxes}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="1" Rows="2" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Content="{Binding Name}" IsChecked="{Binding Work}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </GroupBox>
+        <WrapPanel Grid.Row="4" HorizontalAlignment="Right" Height="auto" Margin="0,10,170,-10">
+            <Button x:Name="OKButton" Content="OK" IsDefault="True" Click="OKButtonClick_Handler" Height="30" Width="80" Margin="0,-10,5,-10"></Button>
+            <Button Content="{DynamicResource l_cancel}" IsCancel="True" Height="30" Width="80" Margin="0,-10,5,-10" />
+        </WrapPanel>
+    </Grid>
+</Window>

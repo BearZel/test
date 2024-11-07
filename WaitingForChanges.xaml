@@ -1,0 +1,28 @@
+﻿<Window x:Class="AbakConfigurator.WaitingForChanges"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        mc:Ignorable="d"
+        Closing="ClosingOff"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        WindowStartupLocation="CenterScreen"
+        Height="256.667" Width="400" WindowStyle ="SingleBorderWindow" SizeToContent="Height" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+        <Image Grid.Row="1" gif:ImageBehavior.AnimatedSource="/AbakConfigurator;component/icons/loading.gif" HorizontalAlignment="Center" Margin="97,0" />
+        <Label Grid.Row="2" Content="Идёт поиск контроллера" Margin="0,0,0,-19" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
+
+    </Grid>
+</Window>

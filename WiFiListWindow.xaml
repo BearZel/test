@@ -1,0 +1,28 @@
+﻿<Window x:Class="AbakConfigurator.WiFiListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        Title="{DynamicResource l_wifiListWindow}" Height="300" Width="604"
+        ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        local:HelpProvider.HelpAlias="IDH_TOPIC_OKNO_SPISOK_DOSTUPNYKH_WIFI_SETEJ">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition  Height="40"/>
+        </Grid.RowDefinitions>
+        <ListView x:Name="wifiListView" Grid.Row="0" ItemsSource="{Binding WifiList}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="{DynamicResource l_wifiAccessPointCol}" Width="auto" DisplayMemberBinding="{Binding Path=Name}"/>
+                    <GridViewColumn Header="{DynamicResource l_wifiSSIDCol}" Width="auto" DisplayMemberBinding="{Binding Path=SSID}"/>
+                    <GridViewColumn Header="{DynamicResource l_wifiTypeCol}" Width="auto" DisplayMemberBinding="{Binding Path=OpenedAsString}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <WrapPanel Grid.Row="1" HorizontalAlignment="Right">
+            <Button x:Name="OKButton" Content="OK" IsDefault="True" Click="OKButtonClick_Handler"/>
+            <Button x:Name="CancelButton" Content="{DynamicResource l_cancel}" IsCancel="True" />
+        </WrapPanel>
+    </Grid>
+</Window>

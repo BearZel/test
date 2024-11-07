@@ -1,0 +1,69 @@
+﻿<Window x:Class="AbakConfigurator.ListOfUpdateModules"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        mc:Ignorable="d"
+        Title="Результаты обновления модулей" Width="1900" Height="500"
+        WindowState="Normal"
+        WindowStartupLocation ="CenterOwner"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        local:HelpProvider.HelpAlias="IDH_TOPIC_OKNO__NASTROJKI_SETEVOGO_EHKRANA_">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="80" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Margin" Value="0,5,5,5" />
+        </Style>
+        <Style x:Key="CenterGridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="DataGridCell" x:Key="ActiveCellStyle">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SetColor}" Value="0">
+                    <Setter Property="Background" Value="#ff3d33"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding SetColor}" Value="1">
+                    <Setter Property="Background" Value="Yellow"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding SetColor}" Value="2">
+                    <Setter Property="Background" Value="ForestGreen"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+ 
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DataGrid Grid.Row="1" x:Name="dataGrid" ItemsSource="{Binding ModulesData}" ColumnWidth="*" AutoGenerateColumns="False" IsReadOnly="True">
+            <!--DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <SolidColorBrush Color="{Binding Path=SetColor}"/>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.RowStyle-->
+            <DataGrid.Columns> 
+                <DataGridTextColumn Header="Номер" Binding="{Binding Path=Node_Id}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"  Width="80*" />
+                <DataGridTextColumn Header="Тип" Binding="{Binding Path=Type}" HeaderStyle="{StaticResource CenterGridHeaderStyle}" Width="80*" />
+                <DataGridTextColumn Header="Старая версия ПО" Binding="{Binding Path=OldSoftVer}" HeaderStyle="{StaticResource CenterGridHeaderStyle}" Width="80*" />
+                <DataGridTextColumn Header="Новая версия ПО" Binding="{Binding Path=NewSoftVer}" HeaderStyle="{StaticResource CenterGridHeaderStyle}" Width="80*"/>
+                <DataGridTextColumn Header="Состояние обновления" Binding="{Binding Path=Update_Status}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"  Width="100*" CellStyle="{StaticResource ActiveCellStyle}" />
+                <DataGridTextColumn Header="Основная часть" Binding="{Binding Path=Com_Status}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"  Width="100*"/>
+                <DataGridTextColumn Header="Дополнительная часть" Binding="{Binding Path=Chan_Status}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"  Width="100*"/>
+                <DataGridTextColumn Header="Дата события" Binding="{Binding Path=LastUpdate}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"  Width="120*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

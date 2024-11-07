@@ -1,0 +1,423 @@
+﻿<Window x:Class="AbakConfigurator.RedundancyWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        mc:Ignorable="d"
+        Title="Настройки резервирования" Height="650" Width="440"
+        WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" ResizeMode="NoResize"
+        Background="AliceBlue">
+    <Grid Width="400" Margin="10,10,10,10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="530"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        <TabControl Grid.Row="0" Grid.ColumnSpan="2" MaxHeight="630">
+            <TabItem Header="Основные настройки">
+                <ScrollViewer x:Name="SV" CanContentScroll="True" PreviewMouseWheel="SV_PreviewMouseWheel">
+                    <Grid  x:Name="RedGrid" Height="auto" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="42*"/>
+                            <ColumnDefinition Width="29*"/>
+                            <ColumnDefinition Width="13*"/>
+                            <ColumnDefinition Width="42*"/>
+                        </Grid.ColumnDefinitions>
+                        <!--Role-->
+                        <Label Content="Роль ЦПУ" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="31,7"/>
+                        <!--Active role-->
+                        <RadioButton x:Name="Active" Content="ID 1 (Основной)" Grid.Row="0" Grid.Column ="1" 
+                                 HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="10,12"/>
+                        <!--Passive role-->
+                        <RadioButton x:Name="Passive" Content="ID 2 (Резервный)" Grid.Row="0" Grid.Column="3"  
+                                 HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,12,7.667,12"/>
+                        <!--IP settings-->
+                        <Rectangle Grid.Row="1" Fill="#eeeeee" Grid.ColumnSpan="4"/>
+                        <Expander Grid.Row="1" Grid.ColumnSpan="4" IsExpanded="True">
+                            <Expander.Header>
+                                <TextBlock Text="Настройки сети" FontWeight="Bold" />
+                            </Expander.Header>
+                            <Grid Background="White">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <!--Active-->
+                                <Label Content="IP Основного ЦПУ (ETH0)" Grid.Row="0"
+                                    HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBox x:Name="ActiveIP" Grid.Row="0" Grid.Column="1"
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                    Margin="30,10,10,10"
+                                    PreviewTextInput="DataValidationTextBox" />
+                                <Separator Grid.Row="0" Grid.ColumnSpan="4" Margin="0,18,-0.333,17" Grid.RowSpan="2" HorizontalAlignment="Right" Width="377"/>
+                                <!--Reserve-->
+                                <Label Content="IP Резервного ЦПУ (ETH0)" Grid.Row="1"  
+                                    HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBox x:Name="PassiveIP" Grid.Row="1" Grid.Column="1"   
+                                          Margin="30,10,10,10" 
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"                                  
+                                    PreviewTextInput="DataValidationTextBox"/>
+                                <Separator Grid.Row="1" Grid.ColumnSpan="4" Margin="0,39,-0.333,37" Grid.RowSpan="2"/>
+                                <!--Port-->
+                                <Label Grid.Row="2" Content="Порт" HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center"/>
+                                <TextBox x:Name="Port" Grid.Row="2" Grid.Column="2" 
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    PreviewTextInput="DataValidationTextBox" Margin="30,10,10,10" 
+                                    ToolTip = "Укажите порт от 1 до 65535" />
+                                <Separator Grid.Row="2" Grid.ColumnSpan="4" Margin="0,39,-0.333,37" Grid.RowSpan="2"/>
+                            </Grid>
+                        </Expander>
+                        <!--Extra IP settings-->
+                        <Rectangle Grid.Row="3" Fill="#eeeeee" Grid.ColumnSpan="4"/>
+                        <Expander x:Name="ExtraIpSettings" Grid.Row="3" Grid.ColumnSpan="4" IsExpanded="True">
+                            <Expander.Header>
+                                <TextBlock Text="Настройки дополнительной сети" FontWeight="Bold" />
+                            </Expander.Header>
+                            <Grid Background="White">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <!--Active-->
+                                <Label Content="IP Основного ЦПУ (ETH1)" Grid.Row="0"
+                                    HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBox x:Name="ExtraActiveIP" Grid.Row="0" Grid.Column="1"
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                    Margin="30,10,10,10"
+                                    PreviewTextInput="DataValidationTextBox" />
+                                <Separator Grid.Row="0" Grid.ColumnSpan="4" Margin="0,18,-0.333,17" Grid.RowSpan="2" HorizontalAlignment="Right" Width="377"/>
+                                <!--Reserve-->
+                                <Label Content="IP Резервного ЦПУ (ETH1)" Grid.Row="1"  
+                                    HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBox x:Name="ExtraPassiveIP" Grid.Row="1" Grid.Column="1"   
+                                          Margin="30,10,10,10" 
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"                                  
+                                    PreviewTextInput="DataValidationTextBox"/>
+                                <Separator Grid.Row="1" Grid.ColumnSpan="4" Margin="0,39,-0.333,37" Grid.RowSpan="2"/>
+                                <!--Port-->
+                                <Label Grid.Row="2" Content="Порт" HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center"/>
+                                <TextBox x:Name="ExtraPort" Grid.Row="2" Grid.Column="2" 
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    PreviewTextInput="DataValidationTextBox" Margin="30,10,10,10" 
+                                    ToolTip = "Укажите порт от 1 до 65535" />
+                                <Separator Grid.Row="2" Grid.ColumnSpan="4" Margin="0,39,-0.333,37" Grid.RowSpan="2"/>
+                            </Grid>
+                        </Expander>
+                        <!--Timings settings-->
+                        <Rectangle Grid.Row="5" Fill="#eeeeee" Grid.ColumnSpan="4"/>
+                        <Expander Grid.Row="5" Grid.ColumnSpan="4" IsExpanded="True">
+                            <Expander.Header>
+                                <TextBlock Text="Настройка таймингов" FontWeight="Bold"/>
+                            </Expander.Header>
+                            <Grid Background="White" x:Name="TimingsGrid">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <!--StandByWaitTime-->
+                                <Label Content="Таймаут переключения" Grid.Row="0" Grid.ColumnSpan="2"  
+                                    HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,7"/>
+                                <TextBox x:Name="StandbyWaitTime" Grid.Row="0" Margin="30,10,10,10"
+                                    HorizontalContentAlignment="Center" Grid.Column="2"
+                                    VerticalContentAlignment="Center"
+                                    PreviewTextInput="DataValidationTextBox" 
+                                    ToolTip="(StandbyWaitTime) Укажите время от 50 мс до 1000 мс"/>
+                                <Separator Grid.Row="0" Grid.ColumnSpan="4" Margin="0,39,-0.333,37" Grid.RowSpan="2"/>
+                                <!--DataWaitTime-->
+                                <Label Grid.Row="1"  HorizontalAlignment="Left"                               
+                                    VerticalAlignment="Center" Content="Таймаут синхронизации" Margin="0,7"/>
+                                <TextBox x:Name="DataWaitTime" Grid.Row="1" Grid.Column="2" 
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    Margin="30,10,10,10" PreviewTextInput="DataValidationTextBox"
+                                    ToolTip="(DataWaitTime/SyncWaitTime) Укажите время от 100 мс до 1000 мс"/>
+                                <Separator Grid.Row="1" Grid.ColumnSpan="4" Margin="0,39,-0.333,37" Grid.RowSpan="2"/>
+                                <!--LockTimeout-->
+                                <Label Grid.Row="2" Content="Синхронизация таймеров" HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="0,7"/>
+                                <TextBox x:Name="LockTimeout" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" 
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    Margin="30,10,10,10" PreviewTextInput="DataValidationTextBox"
+                                    ToolTip="(LockTimeout) Укажите время от 10 мс до 1000 мс"/>
+                                <Separator Grid.Row="2" Grid.ColumnSpan="4" Margin="0,39,-0.333,37" Grid.RowSpan="2"/>
+                                <!--BootupWaitTime-->
+                                <Label Grid.Row="3" Content="Задержка запуска проекта" HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center"/>
+                                <TextBox x:Name="BootupWaitTime" Grid.Row="3" Grid.Column="2"
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    Margin="30,10,10,10" PreviewTextInput="DataValidationTextBox"
+                                    ToolTip="(BootupWaitTime) Укажите время от 1000 мс до 60000 мс"/>
+                                <Separator Grid.Row="3" Grid.ColumnSpan="4" Margin="0,39,-0.333,37" Grid.RowSpan="2"/>
+                                <!--TcpWaitTime-->
+                                <Label Grid.Row="4" Content="Таймаут загрузки (отправки) проекта" HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center" Grid.ColumnSpan="3" Margin="0,7"/>
+                                <TextBox x:Name="TcpWaitTime" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" 
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    Margin="30,10,10,10" PreviewTextInput="DataValidationTextBox"
+                                    ToolTip="(TcpWaitTime) Укажите время от 1000 мс до 60000 мс"/>
+                                <Separator Grid.Row="4" Grid.ColumnSpan="4" Margin="0,39,-0.333,37" Grid.RowSpan="2"/>
+                                <!--ServiceWaitTime-->
+                                <Label Grid.Row="5" Content="Таймут сервисов Codesys" HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="0,7"/>
+                                <TextBox x:Name="ServiceWaitTime" Grid.Row="5" Grid.Column="2" 
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    Margin="30,10,10,10" PreviewTextInput="DataValidationTextBox"
+                                    ToolTip="(ServiceWaitTime) Укажите время от 1000 мс до 10000 мс"/>
+                                <Separator Grid.Row="5" Grid.ColumnSpan="4" Margin="0,39,-0.333,37" Grid.RowSpan="2"/>
+                            </Grid>
+                        </Expander>
+                        <!--Настройки проекта-->
+                        <Rectangle Grid.Row="7" Fill="#eeeeee" Grid.ColumnSpan="4"/>
+                        <Expander Grid.Row="7" Grid.ColumnSpan="4" IsExpanded="True">
+                            <Expander.Header>
+                                <TextBlock Text="Настройка проекта" FontWeight="Bold" />
+                            </Expander.Header>
+                            <Grid Background="White">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <!--BootProject-->
+                                <Label Grid.Row="0" Content="Название проекта" 
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center"/>
+                                <TextBox x:Name="BootProject" Grid.Row="0" Grid.Column="2"
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    Margin="30,10,10,10"
+                                    ToolTip="(BootProject) Укажите имя проекта"/>
+                                <Separator Grid.Row="0" Grid.ColumnSpan="4" Margin="0,39,-0.333,37" Grid.RowSpan="2"/>
+                                <!--RedundancyTaskName-->
+                                <Label Grid.Row="1" Content="Задача резервирования" 
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center"/>
+                                <TextBox x:Name="RedundancyTaskName" Grid.Row="1" Grid.Column="2"
+                                    Margin="30,10,10,10" HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    ToolTip="(RedundancyTaskName) Укажите название задачи резервирования"/>
+                                <Separator Grid.Row="1" Grid.ColumnSpan="4" Margin="0,39,-0.333,37" Grid.RowSpan="2"/>
+                                <!--DataSyncAlways-->
+                                <Label Grid.Row="2" Content="Синхронизация переменных каждый цикл" HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center" Grid.ColumnSpan="4" Margin="0,7"/>
+                                <ToggleButton  x:Name="DataSyncAlways" Width="40" Grid.Row="2" Grid.Column="3"  VerticalAlignment="Center"
+                                    Height="16"  ToolTip="DataSyncAlways"
+                                    Style="{StaticResource SwitchTypeToggleButton}" Margin="30,10,10,10"/>
+                                <Separator Grid.Row="4" Grid.ColumnSpan="4" Margin="0,39,-0.333,37" Grid.RowSpan="2"/>
+                            </Grid>
+                        </Expander>
+                        <!--Логирование отладочных сообщений-->
+                        <Rectangle 
+                            x:Name="LogsRectangle"
+                            Grid.Row="9" 
+                            Fill="#eeeeee" 
+                            Grid.ColumnSpan="4" 
+                            Visibility="Collapsed"/>
+                        <Expander                             
+                            x:Name="LogsExpander"                            
+                            Grid.Row="9" 
+                            Grid.ColumnSpan="4" 
+                            IsExpanded="True" 
+                            Visibility="Collapsed">
+                            <Expander.Header>
+                                <TextBlock 
+                                    Text="Логирование отладочных сообщений"
+                                    FontWeight="Bold" />
+                            </Expander.Header>
+                            <Grid Background="White">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <!--DebugMessages-->
+                                <Label 
+                                    Grid.Row="0" 
+                                    Content="Логирование настроек резервирования" 
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center" 
+                                    Grid.ColumnSpan="3" 
+                                    Margin="0,7"/>
+                                <ToggleButton  
+                                    x:Name="DebugMessages" 
+                                    Width="40" 
+                                    Grid.Row="0" 
+                                    Grid.Column="3"  
+                                    VerticalAlignment="Center"
+                                    Height="16"
+                                    Style="{StaticResource SwitchTypeToggleButton}" 
+                                    Margin="30,10,10,10"/>
+                                <Separator 
+                                    Grid.Row="0" 
+                                    Grid.ColumnSpan="4"
+                                    Margin="0,39,-0.333,37" 
+                                    Grid.RowSpan="2"/>
+                                <!--DebugMessagesTaskTime-->
+                                <Label 
+                                    Grid.Row="1" 
+                                    Content="Логирование корректировки времени циклов" 
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center" 
+                                    Grid.ColumnSpan="4" 
+                                    Margin="0,7"/>
+                                <ToggleButton  
+                                    x:Name="DebugMessagesTaskTime" 
+                                    Width="40" 
+                                    Grid.Row="1" 
+                                    Grid.Column="3"  
+                                    VerticalAlignment="Center"
+                                    Height="16"
+                                    Style="{StaticResource SwitchTypeToggleButton}" 
+                                    Margin="30,10,10,10"/>
+                                <Separator 
+                                    Grid.Row="1" 
+                                    Grid.ColumnSpan="4" 
+                                    Margin="0,39,-0.333,37" 
+                                    Grid.RowSpan="2"/>
+                            </Grid>
+                        </Expander>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Modbus">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="14*"/>
+                        <ColumnDefinition Width="45*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="*" MaxHeight="105"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Синхронизация Modbus пространств" Grid.ColumnSpan ="2"
+                           Background="White"/>
+                    <DataGrid Grid.Row="1" x:Name="ModbusDG" ItemsSource="{Binding ModbusAreas}" ColumnWidth="Auto" 
+                          AutoGenerateColumns="False"  CanUserAddRows="false"
+                              Background="#FFE6E6E6" Grid.ColumnSpan="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="№" Binding="{Binding Path=Num}" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Тип пространства" Binding="{Binding Path=Name}"  
+                                               Width="*" MinWidth="150"
+                                    IsReadOnly="True"/>
+                            <DataGridTemplateColumn Header="Активация"  MinWidth="50">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Width="16"  HorizontalAlignment="Center" IsChecked="{Binding IsChoosen, UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <CheckBox Grid.Row="2" Grid.ColumnSpan="2" x:Name="Duplication"   
+                              VerticalAlignment="Center"
+                              Content="Дублирование команд Modbus TCP/RTU"
+                              IsChecked="False"
+                              Visibility="Collapsed"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="COM-порты" Height="22" VerticalAlignment="Top"
+                     Background ="#eeeeee">
+                <DataGrid Grid.Row="1" x:Name="Interfaces"   ColumnWidth="Auto" 
+                          AutoGenerateColumns="False" CanUserAddRows="false" Background="#FFE6E6E6" 
+                          ToolTip="Выберете порты, которые будут использоваться в Slave режиме">
+                    <DataGrid.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.ContainerStyle>
+                                <Style TargetType="{x:Type GroupItem}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                <Expander x:Name="expander" IsExpanded="True" BorderBrush="#FFA4B97F"
+                                                      BorderThickness="0,0,0,1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                                    <Expander.Header>
+                                                        <TextBlock FontWeight="Bold" Text="{Binding Name}" Margin="5,0,0,0"
+                                                               Width="{Binding ActualWidth, ElementName=tagsListView}"/>
+                                                    </Expander.Header>
+                                                    <ItemsPresenter />
+                                                </Expander>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.ContainerStyle>
+                        </GroupStyle>
+                    </DataGrid.GroupStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="№" Binding="{Binding Path=NumForWindow}" IsReadOnly="True" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="COM-порт" Binding="{Binding Path=Name}"  MinWidth="100"
+                                    IsReadOnly="True"/>
+                        <DataGridTemplateColumn Header ="Вкл/Выкл"  MinWidth="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox Width="16" HorizontalAlignment="Center" IsChecked="{Binding IsChoosen, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Примечание" Binding="{Binding Path=Discription}" 
+                                           Width="*" IsReadOnly="True" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+        <Border Grid.Row="1" Background="#FF2C2B2B" Grid.ColumnSpan="2">
+            <Button x:Name="Accept" Click="Accept_Click"  Height="40" Width="100" Content="Применить"
+                VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" />
+        </Border>
+    </Grid>
+</Window>
