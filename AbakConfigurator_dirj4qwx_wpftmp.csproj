@@ -1,0 +1,609 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8EEB5D9B-99FD-41FC-8FE5-B9634A83C196}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AbakConfigurator</RootNamespace>
+    <AssemblyName>AbakConfigurator</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <ApplicationIcon>rounded_logo.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbakConfiguratorHelp.cs" />
+    <Compile Include="AfterRestoreWindow.xaml.cs">
+      <DependentUpon>AfterRestoreWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AppSettingsWindow.xaml.cs">
+      <DependentUpon>AppSettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BackupWindow.xaml.cs">
+      <DependentUpon>BackupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CodesyscontrolWindow.xaml.cs">
+      <DependentUpon>CodesyscontrolWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IPRangeValidationRule.cs" />
+    <Compile Include="LicensesWindow.xaml.cs">
+      <DependentUpon>LicensesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RedundancyWindow.xaml.cs">
+      <DependentUpon>RedundancyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WaitingForChanges.xaml.cs">
+      <DependentUpon>WaitingForChanges.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WaitingForUpdateWindow.xaml.cs">
+      <DependentUpon>WaitingForUpdateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CanSpeedWarning.xaml.cs">
+      <DependentUpon>CanSpeedWarning.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CANspeedWindow.xaml.cs">
+      <DependentUpon>CANspeedWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CComPort.cs" />
+    <Compile Include="CConfig.cs" />
+    <Compile Include="CEthernetInterface.cs" />
+    <Compile Include="CIniFile.cs" />
+    <Compile Include="COMPortsPLC3Window.xaml.cs">
+      <DependentUpon>COMPortsPLC3Window.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="COMPortsWindow.xaml.cs">
+      <DependentUpon>COMPortsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CorrectTimeWindow.xaml.cs">
+      <DependentUpon>CorrectTimeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CPostgresAuxil.cs" />
+    <Compile Include="CSSHClient.cs" />
+    <Compile Include="CUpdateController.cs" />
+    <Compile Include="EditCOMPortWindow.xaml.cs">
+      <DependentUpon>EditCOMPortWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditUserWindow.xaml.cs">
+      <DependentUpon>EditUserWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EthernetStatisticWindow.xaml.cs">
+      <DependentUpon>EthernetStatisticWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EthernetWindow.xaml.cs">
+      <DependentUpon>EthernetWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FirewallWindow.xaml.cs">
+      <DependentUpon>FirewallWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HelpProvider.cs" />
+    <Compile Include="JournalsWindow.xaml.cs">
+      <DependentUpon>JournalsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MACAddressesWindow.xaml.cs">
+      <DependentUpon>MACAddressesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules.cs" />
+    <Compile Include="ModulesTemplates.xaml.cs">
+      <DependentUpon>ModulesTemplates.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UploadImageWindow.xaml.cs">
+      <DependentUpon>UploadImageWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ImageSelectionWindow.xaml.cs">
+      <DependentUpon>ImageSelectionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ModuleUpdatesWindow.xaml.cs">
+      <DependentUpon>ModuleUpdatesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PasswordControl.xaml.cs">
+      <DependentUpon>PasswordControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PrepareSDWindow.xaml.cs">
+      <DependentUpon>PrepareSDWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RestoreOptionsWindow.xaml.cs">
+      <DependentUpon>RestoreOptionsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateWindow.xaml.cs">
+      <DependentUpon>UpdateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UploadZipLog.xaml.cs">
+      <DependentUpon>UploadZipLog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UsersWindow.xaml.cs">
+      <DependentUpon>UsersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WaitingWindow.xaml.cs">
+      <DependentUpon>WaitingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WiFiListWindow.xaml.cs">
+      <DependentUpon>WiFiListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SessionWindows.xaml.cs">
+      <DependentUpon>SessionWindows.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="USBWindow.xaml.cs">
+      <DependentUpon>USBWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ListOfUpdateModules.xaml.cs">
+      <DependentUpon>ListOfUpdateModules.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomMsgBox.xaml.cs">
+      <DependentUpon>CustomMsgBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CantChangeSpeed.xaml.cs">
+      <DependentUpon>CantChangeSpeed.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CurrencyWindow.xaml.cs">
+      <DependentUpon>CurrencyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WriteConfigPasswordWindow.xaml.cs">
+      <DependentUpon>WriteConfigPasswordWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CrypterClass.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddSubGroupWindow.xaml.cs">
+      <DependentUpon>AddSubGroupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CAuxil.cs" />
+    <Compile Include="CBeckInfo.cs" />
+    <Compile Include="ChannelsWindow.xaml.cs">
+      <DependentUpon>ChannelsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CommandLineClass.cs" />
+    <Compile Include="ControllersWindow.xaml.cs">
+      <DependentUpon>ControllersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CXML.cs" />
+    <Compile Include="EditParamControl.xaml.cs">
+      <DependentUpon>EditParamControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Global.cs" />
+    <Compile Include="GroupWriteWindow.xaml.cs">
+      <DependentUpon>GroupWriteWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PasswordWindow.xaml.cs">
+      <DependentUpon>PasswordWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="SelectControler.xaml.cs">
+      <DependentUpon>SelectControler.xaml</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="ParamsConfig.rdlc" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include=".editorconfig" />
+    <None Include="app.config" />
+    <None Include="Codesys\Application.app" />
+    <None Include="Codesys\Application.crc" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\tag480.png" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\xparams\xparams_49.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>Клиентский профиль .NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Установщик Windows 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\xparams\english_49.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="english_49.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="xparams_49.xml" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\DataSources\" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>call $(SolutionDir)Properties\version.exe</PostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\DotNetZip.1.14.0\lib\net40\DotNetZip.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\EasyModbusTCP.5.6.0\lib\net40\EasyModbus.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\Microsoft.Bcl.AsyncInterfaces.1.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\Microsoft.ReportViewer.Common.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\Microsoft.ReportViewer.ProcessingObjectModel.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\Microsoft.ReportViewer.WinForms.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\mscorlib.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\Npgsql.4.1.3\lib\net461\Npgsql.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\PresentationCore.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\PresentationFramework.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Core.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Data.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Drawing.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Numerics.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\System.Runtime.CompilerServices.Unsafe.4.6.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\System.Text.Encodings.Web.4.6.0\lib\netstandard2.0\System.Text.Encodings.Web.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\System.Text.Json.4.6.0\lib\net461\System.Text.Json.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\System.Threading.Tasks.Extensions.4.5.3\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Windows.Forms.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Xaml.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Xml.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Xml.Linq.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\UIAutomationProvider.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\WindowsBase.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\WindowsFormsIntegration.dll" />
+    <ReferencePath Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\packages\WpfAnimatedGif.2.0.2\lib\net40\WpfAnimatedGif.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\Microsoft.Win32.Primitives.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\netstandard.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.AppContext.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Collections.Concurrent.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Collections.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Collections.NonGeneric.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Collections.Specialized.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.ComponentModel.Annotations.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.ComponentModel.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.ComponentModel.EventBasedAsync.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.ComponentModel.Primitives.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.ComponentModel.TypeConverter.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Console.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Data.Common.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Diagnostics.Contracts.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Diagnostics.Debug.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Diagnostics.FileVersionInfo.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Diagnostics.Process.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Diagnostics.StackTrace.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Diagnostics.TextWriterTraceListener.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Diagnostics.Tools.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Diagnostics.TraceSource.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Drawing.Primitives.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Dynamic.Runtime.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Globalization.Calendars.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Globalization.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Globalization.Extensions.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.IO.Compression.ZipFile.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.IO.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.IO.FileSystem.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.IO.FileSystem.DriveInfo.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.IO.FileSystem.Primitives.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.IO.FileSystem.Watcher.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.IO.IsolatedStorage.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.IO.MemoryMappedFiles.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.IO.Pipes.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.IO.UnmanagedMemoryStream.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Linq.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Linq.Expressions.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Linq.Parallel.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Linq.Queryable.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Net.Http.Rtc.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Net.NameResolution.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Net.NetworkInformation.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Net.Ping.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Net.Primitives.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Net.Requests.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Net.Security.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Net.Sockets.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Net.WebHeaderCollection.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Net.WebSockets.Client.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Net.WebSockets.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.ObjectModel.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Reflection.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Reflection.Emit.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Reflection.Emit.ILGeneration.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Reflection.Emit.Lightweight.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Reflection.Extensions.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Reflection.Primitives.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Resources.Reader.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Resources.ResourceManager.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Resources.Writer.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Runtime.CompilerServices.VisualC.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Runtime.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Runtime.Extensions.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Runtime.Handles.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Runtime.InteropServices.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Runtime.InteropServices.RuntimeInformation.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Runtime.InteropServices.WindowsRuntime.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Runtime.Numerics.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Runtime.Serialization.Formatters.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Runtime.Serialization.Json.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Runtime.Serialization.Primitives.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Runtime.Serialization.Xml.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Security.Claims.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Security.Cryptography.Algorithms.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Security.Cryptography.Csp.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Security.Cryptography.Encoding.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Security.Cryptography.Primitives.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Security.Cryptography.X509Certificates.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Security.Principal.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Security.SecureString.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.ServiceModel.Duplex.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.ServiceModel.Http.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.ServiceModel.NetTcp.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.ServiceModel.Primitives.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.ServiceModel.Security.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Text.Encoding.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Text.Encoding.Extensions.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Text.RegularExpressions.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Threading.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Threading.Overlapped.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Threading.Tasks.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Threading.Tasks.Parallel.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Threading.Thread.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Threading.ThreadPool.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Threading.Timer.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Xml.ReaderWriter.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Xml.XDocument.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Xml.XmlDocument.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Xml.XmlSerializer.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Xml.XPath.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Facades\System.Xml.XPath.XDocument.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\AfterRestoreWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\App.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\AboutWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\AddSubGroupWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\AppSettingsWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\BackupWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\CodesyscontrolWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\LicensesWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\RedundancyWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\WaitingForChanges.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\WaitingForUpdateWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\CanSpeedWarning.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\CANspeedWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\ChannelsWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\COMPortsPLC3Window.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\COMPortsWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\ControllersWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\CorrectTimeWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\EditCOMPortWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\EditParamControl.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\EditUserWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\EthernetStatisticWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\EthernetWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\FirewallWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\GroupWriteWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\JournalsWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\LoginWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\MACAddressesWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\MainWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\ModulesTemplates.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\UploadImageWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\ImageSelectionWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\ModuleUpdatesWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\PasswordControl.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\PasswordWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\PrepareSDWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\RestoreOptionsWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\SelectControler.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\UpdateWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\UploadZipLog.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\UsersWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\WaitingWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\WiFiListWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\SessionWindows.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\USBWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\ListOfUpdateModules.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\CustomMsgBox.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\CantChangeSpeed.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\CurrencyWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\WriteConfigPasswordWindow.g.cs" />
+    <Compile Include="C:\Users\Никита\Desktop\IMAGES\ForGIT\Configurator\master\ABAK_PLC_Configuration\Configurator\obj\Debug\GeneratedInternalTypeHelper.g.cs" />
+  </ItemGroup>
+</Project>

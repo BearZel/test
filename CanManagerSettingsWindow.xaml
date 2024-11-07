@@ -1,0 +1,199 @@
+﻿<Window x:Class="AbakConfigurator.CanManagerSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        mc:Ignorable="d"
+        Title="Настройка удалённых корзин" 
+        Height="300" 
+        Width="400"
+        ResizeMode="NoResize"
+        WindowStyle="ThreeDBorderWindow"
+        WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <Style 
+            x:Key="RowStyle" 
+            TargetType="{x:Type FrameworkElement}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style 
+            x:Key="IpTextBoxStyle" 
+            TargetType="{x:Type TextBox}">
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Grid.Column" Value="1"/>
+            <Setter Property="Grid.Row" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <EventSetter Event="PreviewTextInput" Handler="TextBox_PreviewTextInput"/>
+            <EventSetter Event="PreviewKeyDown" Handler="TextBox_PreviewKeyDown"/>
+            <EventSetter Event="TextChanged" Handler="TextBox_TextChanged"/>
+        </Style>
+        <Style 
+            x:Key="TextBoxStyle" 
+            TargetType="{x:Type TextBox}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Grid.Column" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style
+            x:Key="ButtonStyle"
+            TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="35"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="AliceBlue"/>
+        </Style>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Paste"
+                  Executed="PasteExecuted" />
+    </Window.CommandBindings>
+    <Grid 
+        Background="#eeeeee">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="220"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Border Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Name="ToolBarPanelBorder" BorderThickness="0,0,0,1" BorderBrush="Gray" Width="auto">
+            <ToolBar HorizontalAlignment="Stretch" Name="toolBarPanel1" VerticalAlignment="Stretch" >
+                <Button 
+                    x:Name="Save" 
+                    Click="Accept_Click" 
+                    Style="{StaticResource ButtonStyle}"
+                    ToolTip="Применить настройки">
+                    <Image 
+                        Source="/AbakConfigurator;component/icons/accept480.png"/>
+                </Button>
+                <Button
+                    ToolTip="Сбросить настройки"
+                    Background="AliceBlue"
+                    BorderThickness="0"
+                    Height="30"
+                    Width="30"
+                    Click="Reset_Click">
+                    <Image 
+                        Source="/AbakConfigurator;component/icons/refresh480.png"/>
+                </Button>
+                <Button
+                    Style="{StaticResource ButtonStyle}"
+                    ToolTip="Добавить корзину"
+                    Click="Add_Click">
+                    <Image 
+                            Source="/AbakConfigurator;component/icons/add480.png"/>
+                </Button>
+                <Button
+                    Style="{StaticResource ButtonStyle}"
+                    ToolTip="Удалить корзину"
+                    Click="Remove_Click">
+                    <Image 
+                            Source="/AbakConfigurator;component/icons/delete480.png"/>
+                </Button>
+            </ToolBar>
+        </Border>
+        <ListBox 
+            x:Name="CanListBox"
+            Grid.Column="0" 
+            FontSize="14"
+            Grid.Row="1"
+            ItemsSource="{Binding CanBusDataCollection}" 
+            DisplayMemberPath="ListName">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <EventSetter 
+                        Event="UIElement.MouseUp" 
+                        Handler="ListBoxItemMouseUp_Handler" />
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox
+                 >
+        <Grid 
+            x:Name="Grid"
+            Grid.Row="1" 
+            Grid.Column="2" 
+            DataContext="{Binding SelectedItem}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label 
+            Content="Тип устройства"
+            Grid.Row="0"
+            Style="{StaticResource RowStyle}"/>
+            <TextBox
+            Grid.Row="0"
+            Text="I-7540D"
+            Style="{StaticResource TextBoxStyle}"
+            IsEnabled="False"/>
+
+            <Label 
+            Content="IP адрес"
+            Grid.Row="1"
+            Style="{StaticResource RowStyle}"/>
+            <TextBox
+                Style="{StaticResource IpTextBoxStyle}"
+                Margin="0,0,120,0"
+                Text="{Binding Path=IP[0]}"
+                CommandManager.PreviewExecuted="PasteExecuted"/>
+            <TextBox
+                Style="{StaticResource IpTextBoxStyle}"
+                Margin="0,0,40,0"
+                Text="{Binding Path=IP[1]}"
+                CommandManager.PreviewExecuted="PasteExecuted"/>
+            <TextBox
+                Style="{StaticResource IpTextBoxStyle}"
+                Margin="0,0,-40,0"
+                Text="{Binding Path=IP[2]}"
+                CommandManager.PreviewExecuted="PasteExecuted"/>
+            <TextBox
+                Style="{StaticResource IpTextBoxStyle}"
+                Margin="0,0,-120,0"
+                Text="{Binding Path=IP[3]}"
+                 CommandManager.PreviewExecuted="PasteExecuted"/>
+            
+            <Label 
+            Content="Порт"
+            Grid.Row="2"
+            Style="{StaticResource RowStyle}"/>
+        <TextBox
+            Grid.Row="2"
+            Text="10003"
+            Style="{StaticResource TextBoxStyle}"
+            IsEnabled="False"/>
+
+        <Label 
+            Content="Скорость шины"
+            Grid.Row="3"
+            Style="{StaticResource RowStyle}"/>
+        <ComboBox 
+            Grid.Row="3"
+            Style="{StaticResource RowStyle}"
+            ItemsSource="{Binding BaudRates}"
+            SelectedItem="{Binding SelectedBaudRate}"
+            Grid.Column="1"
+            Width="150"
+            Height="20"
+            HorizontalContentAlignment="Center"/>
+        </Grid>
+    </Grid>
+</Window>

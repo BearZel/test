@@ -1,0 +1,975 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8EEB5D9B-99FD-41FC-8FE5-B9634A83C196}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AbakConfigurator</RootNamespace>
+    <AssemblyName>AbakConfigurator</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <ApplicationIcon>rounded_logo.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotNetZip, Version=1.14.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>packages\DotNetZip.1.14.0\lib\net40\DotNetZip.dll</HintPath>
+    </Reference>
+    <Reference Include="EasyModbus, Version=5.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\EasyModbusTCP.5.6.0\lib\net40\EasyModbus.dll</HintPath>
+    </Reference>
+    <Reference Include="Jamarino.IntervalTree, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Jamarino.IntervalTree.1.2.1\lib\netstandard2.0\Jamarino.IntervalTree.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.1.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Configuration.Abstractions.8.0.0\lib\net462\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Configuration.Binder.8.0.0\lib\net462\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Primitives.8.0.0\lib\net462\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Office.Interop.Excel.15.0.4795.1001\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Xaml.Behaviors.Wpf.1.1.77\lib\net462\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql, Version=4.1.3.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>packages\Npgsql.4.1.3\lib\net461\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="Renci.SshNet, Version=2024.0.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
+      <HintPath>packages\SSH.NET.2024.0.0\lib\net462\Renci.SshNet.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.6.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encoding.CodePages, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Encoding.CodePages.7.0.0\lib\net462\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Encodings.Web.4.6.0\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Json.4.6.0\lib\net461\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Threading.Tasks.Extensions.4.5.3\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WindowsFormsIntegration">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WpfAnimatedGif, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7cd3b544a090dc, processorArchitecture=MSIL">
+      <HintPath>packages\WpfAnimatedGif.2.0.2\lib\net40\WpfAnimatedGif.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.4.6.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.4.6.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.4.6.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.4.6.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.4.6.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="AfterRestoreWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="AbakConfiguratorHelp.cs" />
+    <Compile Include="AfterRestoreWindow.xaml.cs">
+      <DependentUpon>AfterRestoreWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AppSettingsWindow.xaml.cs">
+      <DependentUpon>AppSettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BackupWindow.xaml.cs">
+      <DependentUpon>BackupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CanLoggerConfig.cs" />
+    <Compile Include="CanManagerSettingsWindow.xaml.cs" />
+    <Compile Include="CConfigLogic.cs" />
+    <Compile Include="CodesysConfig.cs" />
+    <Compile Include="CodesyscontrolWindow.xaml.cs">
+      <DependentUpon>CodesyscontrolWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Config.cs" />
+    <Compile Include="IEC\AddRowWindow.xaml.cs">
+      <DependentUpon>AddRowWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IEC\Constants.cs" />
+    <Compile Include="IEC\ControllerProjects.xaml.cs">
+      <DependentUpon>ControllerProjects.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IEC\ENodeLoader.cs" />
+    <Compile Include="IEC\IEC.xaml.cs">
+      <DependentUpon>IEC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IEC\IntRangeValidationRule.cs" />
+    <Compile Include="IEC\MainViewModel.cs" />
+    <Compile Include="IEC\ServerModel.cs" />
+    <Compile Include="IEC\ModelViewBase.cs" />
+    <Compile Include="IEC\ProjectLoader.cs" />
+    <Compile Include="IEC\ProjectSaver.cs" />
+    <Compile Include="IEC\ServerRowValidationRule.cs" />
+    <Compile Include="IEC\Settings.cs" />
+    <Compile Include="IEC\SettingsModel.cs" />
+    <Compile Include="IEC\UsedAddress.cs" />
+    <Compile Include="network\InterfaceSettings.cs" />
+    <Compile Include="PrefixTextBox.xaml.cs">
+      <DependentUpon>PrefixTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\Entry\EntryDeveloperToVisibilityConverter.cs" />
+    <Compile Include="Secure\Entry\EntryState.cs" />
+    <Compile Include="Secure\IECWindow.xaml.cs">
+      <DependentUpon>IECWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IPRangeValidationRule.cs" />
+    <Compile Include="LicensesWindow.xaml.cs">
+      <DependentUpon>LicensesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RedundancyWindow.xaml.cs">
+      <DependentUpon>RedundancyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\Base\ISecureData.cs" />
+    <Compile Include="Secure\Base\SecureAuth.cs" />
+    <Compile Include="Secure\Base\SecureHandler.cs" />
+    <Compile Include="Secure\Base\SecureProvider.cs" />
+    <Compile Include="Secure\Base\SecureProviderException.cs" />
+    <Compile Include="Secure\Base\SecureRepo.cs" />
+    <Compile Include="Secure\Entry\EntryInputBehaivor.cs" />
+    <Compile Include="Secure\Entry\EntryTypeToVisibilityConverter.cs" />
+    <Compile Include="Secure\PasswordChangeWindow.xaml.cs">
+      <DependentUpon>PasswordChangeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\TermsOfUseDialog.xaml.cs">
+      <DependentUpon>TermsOfUseDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\Toolbox\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Secure\Toolbox\BooleanToVisibilityInversedConverter.cs" />
+    <Compile Include="Secure\Toolbox\ObservableDictionary.cs" />
+    <Compile Include="Secure\Toolbox\StringToBooleanConverter.cs" />
+    <Compile Include="Secure\Data\IECData.cs" />
+    <Compile Include="Secure\Data\RuleData.cs" />
+    <Compile Include="Secure\GroupCreateWindow.xaml.cs">
+      <DependentUpon>GroupCreateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\GroupManagementWindow.xaml.cs">
+      <DependentUpon>GroupManagementWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\Entry\EntryInfo.cs" />
+    <Compile Include="Secure\Entry\EntryType.cs" />
+    <Compile Include="Secure\RuleManagementWindow.xaml.cs">
+      <DependentUpon>RuleManagementWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\Toolbox\Utilities.cs" />
+    <Compile Include="Secure\UserCreateWindow.xaml.cs">
+      <DependentUpon>UserCreateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\UserJournalWindow.xaml.cs">
+      <DependentUpon>UserJournalWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\UserManagementWindow.xaml.cs">
+      <DependentUpon>UserManagementWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SequenceOfEvents\Event.cs" />
+    <Compile Include="SequenceOfEvents\IntRangeValidationRule.cs" />
+    <Compile Include="SequenceOfEvents\Model.cs" />
+    <Compile Include="SequenceOfEvents\EventsLoader.cs" />
+    <Compile Include="WaitingForChanges.xaml.cs">
+      <DependentUpon>WaitingForChanges.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WaitingForUpdateWindow.xaml.cs">
+      <DependentUpon>WaitingForUpdateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CanSpeedWarning.xaml.cs">
+      <DependentUpon>CanSpeedWarning.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CANspeedWindow.xaml.cs">
+      <DependentUpon>CANspeedWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CComPort.cs" />
+    <Compile Include="CConfig.cs" />
+    <Compile Include="CEthernetInterface.cs" />
+    <Compile Include="CIniFile.cs" />
+    <Compile Include="COMPortsPLC3Window.xaml.cs">
+      <DependentUpon>COMPortsPLC3Window.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="COMPortsWindow.xaml.cs">
+      <DependentUpon>COMPortsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CorrectTimeWindow.xaml.cs">
+      <DependentUpon>CorrectTimeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CPostgresAuxil.cs" />
+    <Compile Include="CSSHClient.cs" />
+    <Compile Include="CUpdateController.cs" />
+    <Compile Include="EditCOMPortWindow.xaml.cs">
+      <DependentUpon>EditCOMPortWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditUserWindow.xaml.cs">
+      <DependentUpon>EditUserWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EthernetStatisticWindow.xaml.cs">
+      <DependentUpon>EthernetStatisticWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EthernetWindow.xaml.cs">
+      <DependentUpon>EthernetWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FirewallWindow.xaml.cs">
+      <DependentUpon>FirewallWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HelpProvider.cs" />
+    <Compile Include="JournalsWindow.xaml.cs">
+      <DependentUpon>JournalsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MACAddressesWindow.xaml.cs">
+      <DependentUpon>MACAddressesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules.cs" />
+    <Compile Include="ModulesTemplates.xaml.cs">
+      <DependentUpon>ModulesTemplates.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UploadImageWindow.xaml.cs">
+      <DependentUpon>UploadImageWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ImageSelectionWindow.xaml.cs">
+      <DependentUpon>ImageSelectionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ModuleUpdatesWindow.xaml.cs">
+      <DependentUpon>ModuleUpdatesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PasswordControl.xaml.cs">
+      <DependentUpon>PasswordControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PrepareSDWindow.xaml.cs">
+      <DependentUpon>PrepareSDWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RestoreOptionsWindow.xaml.cs">
+      <DependentUpon>RestoreOptionsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateWindow.xaml.cs">
+      <DependentUpon>UpdateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UploadZipLog.xaml.cs">
+      <DependentUpon>UploadZipLog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UsersWindow.xaml.cs">
+      <DependentUpon>UsersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WaitingWindow.xaml.cs">
+      <DependentUpon>WaitingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WiFiListWindow.xaml.cs">
+      <DependentUpon>WiFiListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SessionWindows.xaml.cs">
+      <DependentUpon>SessionWindows.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="USBWindow.xaml.cs">
+      <DependentUpon>USBWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ListOfUpdateModules.xaml.cs">
+      <DependentUpon>ListOfUpdateModules.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomMsgBox.xaml.cs">
+      <DependentUpon>CustomMsgBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CantChangeSpeed.xaml.cs">
+      <DependentUpon>CantChangeSpeed.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CurrencyWindow.xaml.cs">
+      <DependentUpon>CurrencyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SequenceOfEvents\SequenceOfEvents.xaml.cs">
+      <DependentUpon>SequenceOfEvents.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WorkerWithBitAndByte.cs" />
+    <Compile Include="WriteConfigPasswordWindow.xaml.cs">
+      <DependentUpon>WriteConfigPasswordWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="AddSubGroupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="AppSettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BackupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CanManagerSettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CodesyscontrolWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IEC\AddRowWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IEC\ControllerProjects.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IEC\IEC.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PrefixTextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Secure\IECWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LicensesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RedundancyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Secure\GroupCreateWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Secure\GroupManagementWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Secure\PasswordChangeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Secure\RuleManagementWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Secure\TermsOfUseDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Secure\UserCreateWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Secure\UserJournalWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Secure\UserManagementWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WaitingForChanges.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WaitingForUpdateWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CanSpeedWarning.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CANspeedWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ChannelsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="COMPortsPLC3Window.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="COMPortsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControllersWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CorrectTimeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditCOMPortWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditParamControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="EditUserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EthernetStatisticWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EthernetWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FirewallWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JournalsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MACAddressesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ModulesTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UploadImageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ImageSelectionWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ModuleUpdatesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PasswordControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PasswordWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PrepareSDWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\lang.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\lang.ru-RU.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RestoreOptionsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SelectControler.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CrypterClass.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="UpdateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UploadZipLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UsersWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WaitingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WiFiListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SessionWindows.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="USBWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ListOfUpdateModules.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomMsgBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CantChangeSpeed.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CurrencyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SequenceOfEvents\SequenceOfEvents.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WriteConfigPasswordWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddSubGroupWindow.xaml.cs">
+      <DependentUpon>AddSubGroupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CAuxil.cs" />
+    <Compile Include="CBeckInfo.cs" />
+    <Compile Include="ChannelsWindow.xaml.cs">
+      <DependentUpon>ChannelsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CommandLineClass.cs" />
+    <Compile Include="ControllersWindow.xaml.cs">
+      <DependentUpon>ControllersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CXML.cs" />
+    <Compile Include="EditParamControl.xaml.cs">
+      <DependentUpon>EditParamControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Global.cs" />
+    <Compile Include="PasswordWindow.xaml.cs">
+      <DependentUpon>PasswordWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="SelectControler.xaml.cs">
+      <DependentUpon>SelectControler.xaml</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="ParamsConfig.rdlc" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include=".editorconfig" />
+    <None Include="app.config" />
+    <None Include="Codesys\Application.app" />
+    <None Include="Codesys\Application.crc" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\test.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\download480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\new480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\open480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\save480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\settings480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\start480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\stop480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\tag480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\upload480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\saveAs480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\cancel480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\accept480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\exit480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\tags480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\Key480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="tags.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\find512.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\xparams\xparams_49.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>Клиентский профиль .NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Установщик Windows 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\xparams\english_49.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="english_49.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="xparams_49.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\pov.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\eng.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\oper.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\lock16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\refresh480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\apply480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\update480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\wifion480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\wifioff480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\search480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\erase480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\DataSources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\add480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\delete480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\save480gray.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\pin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\ping_gray.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\edit480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="templates\ai8.xml" />
+    <Resource Include="templates\ao8%28i%29.xml" />
+    <Resource Include="templates\ao8%28u%29.xml" />
+    <Resource Include="templates\di16.xml" />
+    <Resource Include="templates\do16.xml" />
+    <Resource Include="templates\fi8.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\info512.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\csv512.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\questionmark480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\exclamationmark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\CPU.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\CheckMark.png" />
+    <Resource Include="icons\CrossMark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="rounded_logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\djuster.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\crut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\loading.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\empty480.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\Instagram.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\youtube.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="instagram_P3Z_icon.ico" />
+    <Resource Include="youtube_aDT_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\minus.png" />
+    <Resource Include="icons\plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Secure\Data\RuleScheme.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Secure\Data\IECScheme.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Secure\Data\TermsOfUse.txt" />
+    <Resource Include="icons\ethernet.png" />
+    <Resource Include="icons\usb.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>call $(SolutionDir)Properties\version.exe</PostBuildEvent>
+  </PropertyGroup>
+</Project>

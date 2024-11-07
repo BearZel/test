@@ -1,0 +1,34 @@
+﻿<Window x:Class="AbakConfigurator.CanSpeedWarning"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        WindowStyle="SingleBorderWindow" 
+        WindowStartupLocation="CenterOwner"
+        Title="Внимание!" Height="210" Width="360"
+        ResizeMode="NoResize">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="110"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="1" Margin="5,5,56,5" >
+            <Image DockPanel.Dock="Left" Source="/AbakConfigurator;component/icons/exclamationmark.png" Width="48" Margin="0,0,0,-4" />
+            <!--TextBox IsReadOnly="True" TextWrapping="Wrap" x:Name="TBNodeId" FontSize="16" HorizontalAlignment="Stretch" Background="Transparent" BorderBrush="Transparent" Width="242" Margin="0,0,0,-4" ></TextBox-->
+            <TextBlock TextWrapping="Wrap" x:Name="TBNodeId" Width="285" FontSize="16" Margin="0,0,0,-4"><Run Text="В системе присутствуют модули,"/><Run Text=" "/><Run Text="которые не смогут автоматически изменить скорость! Нажмите на иконку        чтобы отобразить список модулей"/></TextBlock>
+        </DockPanel>
+        <Image Source="/AbakConfigurator;component/icons/new480.png" Margin="112,67,263,15" Grid.Row="1" />
+        <!--CheckBox Grid.Row="1"  Grid.ColumnSpan="1" Content="Применить для всех?" HorizontalAlignment="Left" Margin="33,8,0,0" VerticalAlignment="Top" x:Name="AcceptForAllBox" FontSize="16" Height="23"/-->
+        <WrapPanel Grid.Row="2"  Grid.ColumnSpan="1" HorizontalAlignment="Center" Height="auto" Margin="0,4,46,-8" Width="354" Background="#EBEBEB">
+            <Button x:Name="FirstButton" Content="ОК" Width="80" Margin="139,8,0,0" Height="30" FontSize="16" Click="AutomaticButtonClick_Handler" HorizontalAlignment="Center" />
+        </WrapPanel>
+    </Grid>
+</Window>

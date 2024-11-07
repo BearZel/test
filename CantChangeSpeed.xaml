@@ -1,0 +1,46 @@
+﻿<Window x:Class="AbakConfigurator.CantChangeSpeed"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        mc:Ignorable="d"
+        Title="Список модулей" Height="370" Width="200" 
+        WindowState="Normal"
+        WindowStyle="SingleBorderWindow" 
+        WindowStartupLocation="CenterOwner"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        ResizeMode="NoResize"
+        local:HelpProvider.HelpAlias="IDH_TOPIC_OKNO__NASTROJKI_SETEVOGO_EHKRANA_">
+
+    <Window.Resources>
+        <Style x:Key="CenterGridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DataGrid Grid.Row="1" x:Name="dataGridspeed" ItemsSource="{Binding ModulesParams}" ColumnWidth="*" AutoGenerateColumns="False" IsReadOnly="True">
+            <!--DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <SolidColorBrush Color="{Binding Path=SetColor}"/>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.RowStyle-->
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Номер" Binding="{Binding Path=Node_Id}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"  Width="100" />
+                <DataGridTextColumn Header="Тип" Binding="{Binding Path=Type}" HeaderStyle="{StaticResource CenterGridHeaderStyle}" Width="100" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

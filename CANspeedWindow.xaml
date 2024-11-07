@@ -1,0 +1,58 @@
+﻿<Window x:Class="AbakConfigurator.CANspeedWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AbakConfigurator"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Title="Настройка CAN-шины" Height="150" Width="220"
+        WindowStartupLocation="CenterOwner" WindowStyle="SingleBorderWindow" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        <ToolBar 
+            Grid.Row="0">
+            <Button
+                Click="Accept">
+                <Image 
+                    ToolTip="Применить настройки"
+                    Width="24" 
+                    Height="24" 
+                    Source="/AbakConfigurator;component/icons/accept480.png" />
+            </Button>
+            <Button
+                Click="Refresh">
+                <Image
+                    ToolTip="Отменить изменения"
+                    Width="24" 
+                    Height="20" 
+                    Source="/AbakConfigurator;component/icons/cancel480.png" />
+            </Button>
+            <Button
+                Click="ResetToDefault">
+                <Image 
+                    ToolTip="Сбросить настройки до заводских"
+                    Width="20" 
+                    Height="20" 
+                    Source="/AbakConfigurator;component/icons/refresh480.png" />
+            </Button>
+        </ToolBar>
+        <Label
+            Content="Скорость CAN-шины"
+            Margin="25,0,20,0"
+            Grid.Row="1"/>
+        <ComboBox
+            x:Name="ComboBoxCAN"
+            Grid.Row="2"
+            Width="170"
+            ItemsSource="{Binding Speed, Mode=OneWay}" 
+            SelectedItem="{Binding CurrentSpeed, Mode=TwoWay}"
+            HorizontalContentAlignment="Center"
+            />
+    </Grid>
+
+</Window>
